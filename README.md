@@ -92,7 +92,7 @@ File copy tool will copy files and directories from one place to another.
 ### NOAA Open Data Dissemination (NODD) Workflow
 ![](./_docs/icons/nodd_workflow.png "")
 
-### <a href="./toolbox/NODD_Upload_Tool/nodd_upload_tool.py">NODD GUI Upload Tool </a>
+### <a href="./toolbox/NODD_Upload_Tool/nodd_upload_tool.py">NODD GUI Upload Tool</a>
 <img src="_docs/icons/nodd_app_01.png" alt="NODD Upload Tool" >
 
 ## Requirements 
