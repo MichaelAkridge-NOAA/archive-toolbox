@@ -112,16 +112,14 @@ File copy tool will copy files and directories from one place to another.
 ### Simple NODD Upload Script Example
 
 ```
-gsutil -o "GSUtil:throttle_bandwidth=625000" -m rsync -r -n 
--x "(^.*(?<!\.JPG)$)|(.*_archive.*|.*_YEAR.*|.*ISLAND.*|.*SITE-ID.*|.*SITE_PHOTOS.*|.*uncorrected.*|.*MISC.*|.*DARK.*|.*Products.*)" 
-C:\nodd\test gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/test
+gsutil -m rsync -r  C:\destination_folder_path gs://<bucket_name>/<destination_folder_path>
 ```
 
 <details> 
 <summary>--- read: breakdown of what each flag and option does:</summary>
 
 - <b>gsutil</b>: This is the command-line tool for interacting with Google Cloud Storage. https://cloud.google.com/storage/docs/gsutil
-- <b>-o "GSUtil:parallel_thread_count=4" </b> if use multi-threading, limit bandwidth usage with this flag
+- <b>-o "GSUtil:parallel_thread_count=12" </b> if use multi-threading, limit bandwidth usage with this flag
 - <b>-m</b>: This flag enables multi-threading, which speeds up the transfer by using multiple connections.
 - <b>rsync</b>: This is the command to synchronize files and directories between a local and a remote location.
 - <b>-r</b>: This flag tells rsync to perform a recursive copy of the entire directory tree.
@@ -130,7 +128,8 @@ C:\nodd\test gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/test
 - <b>local_dir</b> C:\nodd\test: This is the local directory that will be synchronized.
 - <b>cloud_dir</b> gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/test: This is the Google Cloud Storage bucket and destination path where the data will be synchronized.
 
-The <b>-x </b>excluded patterns in detail in this case are: 
+The <b>-x </b>excluded patterns in detail we use are: 
+- -x "(^.*(?<!\.JPG)$)|(.*_archive.*|.*_YEAR.*|.*ISLAND.*|.*SITE-ID.*|.*SITE_PHOTOS.*|.*uncorrected.*|.*MISC.*|.*DARK.*|.*Products.*)" 
 - <b>(^.*(?<!\.JPG)$)</b>
 - - Matches any files that do not end with the ".JPG" extension. 
 - <b>(.*_archive.*|.*_YEAR.*|.*ISLAND.*|.*SITE-ID.*|.*SITE_PHOTOS.*|.*uncorrected.*|.*MISC.*|.*DARK.*|.*Products.*)</b>
@@ -140,7 +139,7 @@ The <b>-x </b>excluded patterns in detail in this case are:
 
 ### Simple NODD Download Script Example
 ```
-gsutil -m rsync -r gs://<source_bucket_name>/<source_folder_path> <destination_folder_path>
+gsutil -m rsync -r gs://<source_bucket_name>/<source_folder_path> C:\destination_folder_path
 ```
 
 ### NODD Details
