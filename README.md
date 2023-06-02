@@ -93,7 +93,7 @@ File copy tool will copy files and directories from one place to another.
 ![](./_docs/icons/nodd_workflow.png "")
 
 ### <a href="./toolbox/NODD_Upload_Tool/nodd_upload_tool.py">NODD GUI Upload Tool</a>
-<img src="_docs/icons/nodd_app_01.png" alt="NODD Upload Tool" >
+<a href="./toolbox/NODD_Upload_Tool/nodd_upload_tool.py"><img src="_docs/icons/nodd_app_01.png" alt="NODD Upload Tool" ></a>
 
 ## Requirements 
 * GSUTIL backend: https://cloud.google.com/storage/docs/gsutil_install
