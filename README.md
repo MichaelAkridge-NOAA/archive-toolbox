@@ -46,7 +46,7 @@ File copy tool will copy files and directories from one place to another.
 " width=400px></a>
 
 ## <a href="./toolbox/garmin-gps-file-converter">Garmin GPS File(GPX)Converter</a>
-* Tool to convert Garmin GPS files(GPX) to standard TXT file format
+* Tool to convert Garmin GPS files(GPX) to standard CSV/TXT file format
 
 <br clear="right"/>
 
