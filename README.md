@@ -81,10 +81,10 @@ File copy tool will copy files and directories from one place to another.
 * PHP based tools. Data packager, bagit data packager, and submission manifest tools. 
 * placeholder - link coming soon - placeholder
 ### Send2NCEI(S2N) 
-* Use Send2NCEI to submit non-repeating or single delivery data less than 20 GB.
+* Send2NCEI (S2N) is an archiving tool that allows you to easily submit your data files and related documentation to the National Centers for Environmental Information for long term preservation, stewardship, and access. 
 * https://www.ncei.noaa.gov/archive/send2ncei/
 ### Advanced Tracking and Resource Tool for Archive Collections (ATRAC)
-* Use to submit repeating or multiple delivery data, or data that exceeds 20 GB.
+* The Advanced Tracking and Resource tool for Archive Collections (ATRAC) provides a common interface for users to enter and display information on archiving projects at the NOAA National Centers for Environmental Information (NCEI).
 * https://www.ncdc.noaa.gov/atrac/guidelines.html
 ----------
 
