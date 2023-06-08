@@ -2,8 +2,10 @@
 
 # ESD/ARP Archive Toolbox
 Collection of Tools, Workflows and Processes to help Facilitate Archiving Scientific Data.
-* Code Language: Python 3
 * Contact: Michael.Akridge@noaa.gov
+
+![made-with-python](https://raw.githubusercontent.com/MichaelAkridge-NOAA/archive-toolbox/main/_docs/icons/python_3.svg)
+
 # Table of Contents
 1. **[Archive Tools](#archive-tools)**
     * [File Copy Tool](#file-copy-tool)
