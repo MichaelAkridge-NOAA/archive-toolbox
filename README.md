@@ -115,8 +115,7 @@ File copy tool will copy files and directories from one place to another.
 gsutil -m rsync -r  C:\destination_folder_path gs://<bucket_name>/<destination_folder_path>
 ```
 
-<details> 
-<summary>--- read: breakdown of what each flag and option does:</summary>
+breakdown of what each flag and option does
 
 - <b>gsutil</b>: This is the command-line tool for interacting with Google Cloud Storage. https://cloud.google.com/storage/docs/gsutil
 - <b>-o "GSUtil:parallel_thread_count=12" </b> if use multi-threading, limit bandwidth usage with this flag
