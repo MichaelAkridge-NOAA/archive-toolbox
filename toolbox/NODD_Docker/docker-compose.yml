@@ -1,0 +1,8 @@
+services:
+  gsutil:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./local_dir:/data
+    entrypoint: [ "gsutil", "-m", "rsync", "-r", "/data", "gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/data_management/data" ]
