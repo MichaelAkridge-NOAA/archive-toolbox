@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  nodd-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./local-dir:/local_directory
+    ports:
+      - "8501:8501"
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.boto
+
