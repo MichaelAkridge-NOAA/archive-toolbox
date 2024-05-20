@@ -62,7 +62,6 @@ services:
 streamlit
 google-cloud-storage
 google-auth-httplib2
-gsutil
 ```
 ### Then Run
 ``
