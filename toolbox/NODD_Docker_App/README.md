@@ -2,9 +2,19 @@
 <img src="https://github.com/MichaelAkridge-NOAA/archive-toolbox/blob/5a99c372b3dd144f6699f19e2158b1e60ed807d3/_docs/icons/nodd_docker_app_01.png" >
 
 ### Add Credentials
-- you can use either a .json file
-- or legacy '.boto' crednetial file like this example
-  - found under: C:\Users\Firstname.Lastname\AppData\Roaming\gcloud\legacy_credentials\your.email@noaa.gov\
+## Example '.boto' File
+```
+[Credentials]
+gs_access_key_id =YOUR_KEY_ID_HERE
+gs_secret_access_key  YOUR_KEY_HERE
+```
+- use existing '.boto' crednetial file like this example
+  - found under: "C:\Users\Firstname.Lastname\AppData\Roaming\gcloud\legacy_credentials\your.email@noaa.gov\"
+  - or found under: "config\legacy_credentials\your.email@noaa.gov\"
+- or create a new boto file with HMAC keys
+- Under google cloud storage settings > Interoperability tab > at bottom "Create a Key"
+
+
 ### Add Dockerfile
 ```
 # Dockerfile
