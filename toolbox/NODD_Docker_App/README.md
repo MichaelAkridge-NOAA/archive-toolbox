@@ -12,7 +12,7 @@ gs_secret_access_key  YOUR_KEY_HERE
   - found under: "C:\Users\Firstname.Lastname\AppData\Roaming\gcloud\legacy_credentials\your.email@noaa.gov\"
   - or found under: "config\legacy_credentials\your.email@noaa.gov\"
 - or create a new boto file with HMAC keys
-- Under google cloud storage settings > Interoperability tab > at bottom "Create a Key"
+  - Under google cloud storage settings > Interoperability tab > at bottom "Create a Key"
 
 
 ### Add Dockerfile
