@@ -69,6 +69,7 @@ services:
 streamlit
 google-cloud-storage
 google-auth-httplib2
+matplotlib
 ```
 ### Then Run
 ``
