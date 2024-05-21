@@ -121,7 +121,7 @@ def upload_file():
             local_file_path = os.path.join("/local_directory", uploaded_file.name)
             with open(local_file_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
-            st.success("File uploaded successfully")
+            st.success("File staged successfully. To continue with cloud upload, press Sync File")
 
             if st.button("Sync File"):
                 try:
