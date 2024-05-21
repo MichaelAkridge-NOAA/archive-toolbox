@@ -4,10 +4,10 @@ import subprocess
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Function to get folder size and file count accurately
+# Cache the results of the functions to prevent re-execution
+@st.cache_data
 def get_folder_stats(bucket_name, folder_path):
     try:
-        # Use gsutil to recursively list file sizes
         result = subprocess.run(
             ["gsutil", "ls", "-l", f"gs://{bucket_name}/{folder_path}/**"],
             check=True,
@@ -32,6 +32,7 @@ def get_folder_stats(bucket_name, folder_path):
     except subprocess.CalledProcessError as e:
         raise Exception(f"gsutil command failed: {e.stderr}")
 
+@st.cache_data
 def list_folders_with_stats(bucket_name, prefix):
     try:
         result = subprocess.run(
@@ -57,7 +58,6 @@ def parse_bucket_and_path(bucket_and_path):
         raise ValueError("Input must be in the format 'bucket_name/folder_path'")
     return parts[0], parts[1]
 
-# Function to create a data dashboard with summary statistics and graphs
 def data_dashboard():
     st.subheader("NODD Google Cloud Storage Dashboard")
     
@@ -70,44 +70,41 @@ def data_dashboard():
             st.error(e)
             return
         
-        # Display folder stats
-        st.write("**Folder Statistics:**")
-        try:
-            folder_stats = list_folders_with_stats(bucket_name, prefix)
-            if not folder_stats:
-                st.write("No folders found.")
+        if st.button("Load Dashboard"):
+            st.write("**Folder Statistics:**")
+            try:
+                folder_stats = list_folders_with_stats(bucket_name, prefix)
+                if not folder_stats:
+                    st.write("No folders found.")
+                    return
+
+                folder_names = [stat[0] for stat in folder_stats]
+                folder_sizes = [stat[1] for stat in folder_stats]
+                file_counts = [stat[2] for stat in folder_stats]
+                
+                stats_df = pd.DataFrame({
+                    "Folder": folder_names,
+                    "Size (GB)": folder_sizes,
+                    "File Count": file_counts
+                })
+                st.table(stats_df)
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
                 return
 
-            folder_names = [stat[0] for stat in folder_stats]
-            folder_sizes = [stat[1] for stat in folder_stats]
-            file_counts = [stat[2] for stat in folder_stats]
-            
-            # Display folder sizes and file counts in a single table
-            stats_df = pd.DataFrame({
-                "Folder": folder_names,
-                "Size (GB)": folder_sizes,
-                "File Count": file_counts
-            })
-            st.table(stats_df)
+            st.write("**Folder Sizes Distribution:**")
+            fig, ax = plt.subplots()
+            ax.barh(folder_names, folder_sizes, color='skyblue')
+            ax.set_xlabel('Size (GB)')
+            ax.set_title('Folder Sizes in Google Cloud Storage')
+            st.pyplot(fig)
 
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-            return
-
-        # Visualize the data
-        st.write("**Folder Sizes Distribution:**")
-        fig, ax = plt.subplots()
-        ax.barh(folder_names, folder_sizes, color='skyblue')
-        ax.set_xlabel('Size (GB)')
-        ax.set_title('Folder Sizes in Google Cloud Storage')
-        st.pyplot(fig)
-
-        st.write("**File Counts Distribution:**")
-        fig, ax = plt.subplots()
-        ax.barh(folder_names, file_counts, color='lightgreen')
-        ax.set_xlabel('Number of Files')
-        ax.set_title('File Counts in Google Cloud Storage')
-        st.pyplot(fig)
+            st.write("**File Counts Distribution:**")
+            fig, ax = plt.subplots()
+            ax.barh(folder_names, file_counts, color='lightgreen')
+            ax.set_xlabel('Number of Files')
+            ax.set_title('File Counts in Google Cloud Storage')
+            st.pyplot(fig)
 
 def upload_file():
     st.subheader("Upload File to Google Cloud Storage")
@@ -126,18 +123,19 @@ def upload_file():
                 f.write(uploaded_file.getbuffer())
             st.success("File uploaded successfully")
 
-            try:
-                result = subprocess.run(
-                    ["gsutil", "-m", "rsync", "-r", "/local_directory", f"gs://{bucket_name}/{folder_path}"],
-                    check=True,
-                    text=True,
-                    capture_output=True
-                )
-                st.success("File synced to Google Cloud Storage successfully")
-                st.text(result.stdout)
-            except subprocess.CalledProcessError as e:
-                st.error("An error occurred while syncing the file to Google Cloud Storage")
-                st.text(e.stderr)
+            if st.button("Sync File"):
+                try:
+                    result = subprocess.run(
+                        ["gsutil", "-m", "rsync", "-r", "/local_directory", f"gs://{bucket_name}/{folder_path}"],
+                        check=True,
+                        text=True,
+                        capture_output=True
+                    )
+                    st.success("File synced to Google Cloud Storage successfully")
+                    st.text(result.stdout)
+                except subprocess.CalledProcessError as e:
+                    st.error("An error occurred while syncing the file to Google Cloud Storage")
+                    st.text(e.stderr)
 
 def get_size():
     st.subheader("Get Folder Size in Google Cloud Storage")
