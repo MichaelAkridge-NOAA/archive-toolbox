@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  nodd-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./local_directory:/local_directory
+    ports:
+      - "8501:8501"
