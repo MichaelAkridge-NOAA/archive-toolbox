@@ -173,8 +173,6 @@ PIFSC NODD
 - - gs://nmfs_odp_pifsc
 - Bucket API
 - - https://www.googleapis.com/storage/v1/b/nmfs_odp_pifsc/o
-- Compute Images
--- https://console.cloud.google.com/compute/images?tab=images&project=nmfs-trusted-images
 
 NODD for other NMFS Centers:
 - https://console.cloud.google.com/storage/browser/nmfs_odp_afsc
