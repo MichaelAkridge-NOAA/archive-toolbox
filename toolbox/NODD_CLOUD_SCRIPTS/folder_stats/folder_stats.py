@@ -20,13 +20,21 @@ def init_db(db_path):
     conn.commit()
     conn.close()
 
-# Function to store metadata in the SQLite database
+# Function to store metadata in the SQLite database, replacing existing records
 def store_metadata(db_path, metadata):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.executemany('INSERT INTO metadata (path, type, size, time_created, updated) VALUES (?, ?, ?, ?, ?)', metadata)
+
+    # Truncate the metadata table
+    cursor.execute('DELETE FROM metadata')
+    
+    # Insert new metadata
+    cursor.executemany('''INSERT INTO metadata (path, type, size, time_created, updated) 
+                          VALUES (?, ?, ?, ?, ?)''', metadata)
+    
     conn.commit()
     conn.close()
+
 
 # Function to gather metadata from Google Cloud Storage using the API
 def gather_metadata(bucket_name, prefix):
