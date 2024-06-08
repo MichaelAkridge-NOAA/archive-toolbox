@@ -18,12 +18,12 @@
 - uses rsync command for "synchronizing files between a computer and a storage drive and across networked computers by comparing the modification times and sizes of files."
 - allows for stop and restart of the download
 ```
-gsutil -m rsync -r "nmfs_odp_pifsc/PIFSC/ESD/ARP/Acoustics" C:\destination_folder_path
+gsutil -m rsync -r "gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/Acoustics" C:/destination_folder_path
 ```
 ### Or use the Simple NODD Download Script Example 02
 ```
 gsutil -m cp -r \
-  "gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/Acoustics" \
+  "gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/Acoustics" /
   .
 ```
  ### Download Notes
