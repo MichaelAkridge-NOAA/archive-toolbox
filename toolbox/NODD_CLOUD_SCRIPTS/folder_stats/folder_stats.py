@@ -2,6 +2,13 @@ import os
 import sqlite3
 import pandas as pd
 from google.cloud import storage
+import logging
+
+# Set the Google Cloud Project ID
+os.environ["GOOGLE_CLOUD_PROJECT"] = "YOUR_PROJECT_ID"
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Function to initialize the SQLite database
 def init_db(db_path):
@@ -14,7 +21,9 @@ def init_db(db_path):
             type TEXT,
             size INTEGER,
             time_created TEXT,
-            updated TEXT
+            updated TEXT,
+            md5Hash TEXT,
+            mediaLink TEXT
         )
     ''')
     conn.commit()
@@ -29,12 +38,16 @@ def store_metadata(db_path, metadata):
     cursor.execute('DELETE FROM metadata')
     
     # Insert new metadata
-    cursor.executemany('''INSERT INTO metadata (path, type, size, time_created, updated) 
-                          VALUES (?, ?, ?, ?, ?)''', metadata)
+    insert_query = '''INSERT INTO metadata (path, type, size, time_created, updated, md5Hash, mediaLink) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?)'''
+    cursor.executemany(insert_query, metadata)
     
     conn.commit()
     conn.close()
 
+    # Print insert statements for the metadata
+    #for item in metadata:
+        #print("INSERT INTO metadata (path, type, size, time_created, updated, md5Hash, mediaLink) VALUES ('{}', '{}', {}, '{}', '{}', '{}', '{}');".format(*item))
 
 # Function to gather metadata from Google Cloud Storage using the API
 def gather_metadata(bucket_name, prefix):
@@ -49,11 +62,11 @@ def gather_metadata(bucket_name, prefix):
         print(f"Found blob: {blob.name}")
         if blob.name.endswith('/'):
             folder_paths.add(blob.name)
-            metadata.append((blob.name, 'folder', 0, blob.time_created.isoformat(), blob.updated.isoformat()))
+            metadata.append((blob.name, 'folder', 0, blob.time_created.isoformat() if blob.time_created else None, blob.updated.isoformat() if blob.updated else None, None, None))
         else:
             folder_path = '/'.join(blob.name.split('/')[:-1]) + '/'
             folder_paths.add(folder_path)
-            metadata.append((folder_path, 'file', blob.size, blob.time_created.isoformat(), blob.updated.isoformat()))
+            metadata.append((folder_path, 'file', blob.size, blob.time_created.isoformat() if blob.time_created else None, blob.updated.isoformat() if blob.updated else None, blob.md5_hash, blob.media_link))
 
     print("Fetching subfolders...")
     for subfolder in blobs.prefixes:
