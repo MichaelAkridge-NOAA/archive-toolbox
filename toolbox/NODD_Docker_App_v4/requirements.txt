@@ -1,0 +1,6 @@
+streamlit
+pandas
+google-cloud-storage
+google-auth-httplib2
+matplotlib
+
