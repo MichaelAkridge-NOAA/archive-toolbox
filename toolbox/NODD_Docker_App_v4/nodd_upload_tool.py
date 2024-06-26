@@ -67,7 +67,7 @@ def init_db(db_path):
     conn.close()
 
 def list_folders_with_gsutil(bucket_name, prefix, db_path):
-    gsutil_command = f"gsutil ls -d gs://{bucket_name}/{prefix}*"
+    gsutil_command = f"gsutil ls -d gs://{bucket_name}/{prefix}/*"
     result = subprocess.run(gsutil_command, shell=True, capture_output=True, text=True)
     if result.returncode != 0:
         logging.error("Error running gsutil command: %s", result.stderr)
@@ -235,7 +235,7 @@ def data_dashboard():
             st.error(str(e))
             return
 
-    if st.button('List Folders'):
+    if st.button('📂 Step 1. Scan Bucket & Store Folder List'):
         if not bucket_and_path_for_dashboard:
             st.error("Please enter a valid bucket name and prefix.")
             return
@@ -256,7 +256,7 @@ def data_dashboard():
 
         st.write("Folder listing completed.")
 
-    if st.button('Fetch Metadata'):
+    if st.button('📊 Step 2. Fetch Metadata & Generate Stats'):
         if not bucket_and_path_for_dashboard:
             st.error("Please enter a valid bucket name and prefix.")
             return
