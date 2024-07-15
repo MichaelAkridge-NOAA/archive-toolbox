@@ -5,4 +5,5 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./local_dir:/data
+      - ./credentials/.boto:/root/.boto:ro
     entrypoint: [ "gsutil", "-m", "rsync", "-r", "/data", "gs://nmfs_odp_pifsc/PIFSC/ESD/ARP/data_management/data" ]

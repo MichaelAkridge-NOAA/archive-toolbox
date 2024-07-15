@@ -14,10 +14,6 @@ RUN apt-get update && apt-get install -y python3-pip && \
 # Copy the rest of the application files
 COPY . .
 
-# Copy the .boto configuration file
-COPY ./credentials/.boto /root/.boto
-COPY ./credentials/.boto /root/.config/gcloud/.boto
-COPY ./credentials/adc.json /root/.config/gcloud/application_default_credentials.json
 # Expose the port Streamlit will run on
 EXPOSE 8501
 

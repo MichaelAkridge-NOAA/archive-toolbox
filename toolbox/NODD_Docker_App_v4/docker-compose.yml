@@ -6,6 +6,10 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./local_directory:/local_directory
+      - ./credentials/.boto:/root/.boto:ro
+      # update vols as needed
+      #- ./credentials/.boto:/root/.config/gcloud/.boto:ro
+      #- ./credentials/adc.json:/root/.config/gcloud/application_default_credentials.json:ro
     ports:
       - "8501:8501"
     environment:

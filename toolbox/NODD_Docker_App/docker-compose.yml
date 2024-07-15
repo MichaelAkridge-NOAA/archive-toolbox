@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./local-dir:/local_directory
+      - ./credentials/.boto:/root/.boto:ro
     ports:
       - "8501:8501"
     environment:
