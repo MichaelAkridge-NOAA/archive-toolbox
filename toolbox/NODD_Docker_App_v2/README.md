@@ -37,9 +37,6 @@ WORKDIR /app
 # Copy application files
 COPY ./ ./
 
-# Copy the .boto configuration file
-COPY ./credentials/.boto /root/.boto
-
 # Install Python and required packages
 RUN apt-get update && apt-get install -y python3-pip
 RUN pip3 install -r requirements.txt

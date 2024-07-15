@@ -11,4 +11,3 @@ services:
       - "8501:8501"
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/root/.boto
-

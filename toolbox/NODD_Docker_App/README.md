@@ -33,9 +33,6 @@ RUN pip3 install -r requirements.txt
 # Install gsutil
 RUN pip3 install gsutil
 
-# Copy gsutil configuration
-COPY .boto /root/.boto
-
 # Expose the port Streamlit will run on
 EXPOSE 8501
 
@@ -52,6 +49,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./local-dir:/local_directory
+      - ./credentials/.boto:/root/.boto:ro
     ports:
       - "8501:8501"
     environment:
