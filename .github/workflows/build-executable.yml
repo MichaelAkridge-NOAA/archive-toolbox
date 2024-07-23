@@ -99,34 +99,45 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set release name and tag
+        id: set-release
+        run: |
+          DATE_TIME=$(date +%Y%m%d%H%M%S)
+          echo "RELEASE_TAG=v1.0.${DATE_TIME}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Release v1.0.${DATE_TIME}" >> $GITHUB_ENV
+
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-windows
-          path: ./artifacts/windows
+          path: ./artifacts
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-macos
-          path: ./artifacts/macos
+          path: ./artifacts
 
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-linux
-          path: ./artifacts/linux
+          path: ./artifacts
+
+      - name: List downloaded artifacts
+        run: ls -R ./artifacts
 
       - name: Create and Upload Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            ./artifacts/windows/gpxconverter.exe
-            ./artifacts/macos/gpxconverter
-            ./artifacts/linux/gpxconverter
+            ./artifacts/gpxconverter-windows/gpxconverter.exe
+            ./artifacts/gpxconverter-macos/gpxconverter
+            ./artifacts/gpxconverter-linux/gpxconverter
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v1.0.1  # Update as necessary
-          name: Release v1.0.1
-          body: "Release v1.0.1 TEST - GHA to build Exe files"
+          tag: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_NAME }}
+          body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
           draft: true
           prerelease: true
+
