@@ -26,8 +26,10 @@ jobs:
 
     - name: Move executable to desired folder
       run: |
-        mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
-        mv dist/gpxconverter.exe ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
+        if (-Not (Test-Path -Path "${{ github.workspace }}\toolbox\garmin-gps-file-converter\dist")) {
+          New-Item -ItemType Directory -Path "${{ github.workspace }}\toolbox\garmin-gps-file-converter\dist"
+        }
+        Move-Item -Path "dist\gpxconverter.exe" -Destination "${{ github.workspace }}\toolbox\garmin-gps-file-converter\dist\gpxconverter.exe"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
@@ -78,7 +80,23 @@ jobs:
       with:
         python-version: '3.11'  # Specify the Python version you need
 
-    - name: Install dependencies
+    - name: Install system dependencies for wxPython
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          freeglut3-dev \
+          libgtk-3-dev \
+          libjpeg-dev \
+          libnotify-dev \
+          libsdl2-dev \
+          libsm-dev \
+          libtiff-dev \
+          libxinerama-dev \
+          libxtst-dev \
+          libbz2-dev \
+          liblzma-dev
+
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller numpy gooey
