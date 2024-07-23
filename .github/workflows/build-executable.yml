@@ -1,4 +1,5 @@
 name: v4 Build Executables
+name: Build Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
@@ -88,36 +89,15 @@ jobs:
         name: gpxconverter-macos
         path: ./artifacts
 
-
-    - name: Create Release
-      id: create_release
+    - name: Create and Upload Release
       uses: ncipollo/release-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        title: Draft Test Release
-        tag_name: v1.0.1  # Update as necessary
-        release_name: Release v1.0.1
+        artifacts: |
+          ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
+          ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: v1.0.1  # Update as necessary
+        name: Release v1.0.1 TEST
+        body: "Release notes for v1.0.1 TEST"
         draft: true
         prerelease: true
-
-    - name: Upload Windows Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
-        asset_name: gpxconverter-windows.exe
-        asset_content_type: application/octet-stream
-
-    - name: Upload macOS Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter
-        asset_name: gpxconverter-macos
-        asset_content_type: application/octet-stream
-
