@@ -26,6 +26,8 @@ jobs:
 
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter.exe dist/gpxconverter-windows.exe
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-windows
@@ -53,11 +55,12 @@ jobs:
 
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter dist/gpxconverter-macos
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-macos
           path: dist/gpxconverter-macos
-
 
   build-linux:
     runs-on: ubuntu-latest
@@ -90,6 +93,8 @@ jobs:
 
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter dist/gpxconverter-linux
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-linux
