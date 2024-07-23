@@ -1,6 +1,7 @@
 name: Build Linux Exe with PyInstaller
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
+jobs:
   build-linux:
     runs-on: ubuntu-latest
 
