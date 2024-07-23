@@ -110,19 +110,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-windows
-          path: ./artifacts
+          path: ./artifacts/windows
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-macos
-          path: ./artifacts
+          path: ./artifacts/macos
 
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-linux
-          path: ./artifacts
+          path: ./artifacts/linux
 
       - name: List downloaded artifacts
         run: ls -R ./artifacts
@@ -131,13 +131,12 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            ./artifacts/gpxconverter-windows/gpxconverter.exe
-            ./artifacts/gpxconverter-macos/gpxconverter
-            ./artifacts/gpxconverter-linux/gpxconverter
+            ./artifacts/windows/gpxconverter.exe
+            ./artifacts/macos/gpxconverter
+            ./artifacts/linux/gpxconverter
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.RELEASE_TAG }}
           name: ${{ env.RELEASE_NAME }}
           body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
           draft: true
           prerelease: true
-
