@@ -24,11 +24,12 @@ jobs:
       - name: Build executable
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-      - name: Upload artifact
+      - name: Rename and Upload artifact
+        run: mv dist/gpxconverter.exe dist/gpxconverter-windows.exe
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-windows
-          path: dist/gpxconverter.exe
+          path: dist/gpxconverter-windows.exe
 
   build-macos:
     runs-on: macos-latest
@@ -50,11 +51,13 @@ jobs:
       - name: Build executable
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-      - name: Upload artifact
+      - name: Rename and Upload artifact
+        run: mv dist/gpxconverter dist/gpxconverter-macos
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-macos
-          path: dist/gpxconverter
+          path: dist/gpxconverter-macos
+
 
   build-linux:
     runs-on: ubuntu-latest
@@ -85,11 +88,12 @@ jobs:
         run: |
           conda run -n myenv pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-      - name: Upload artifact
+      - name: Rename and Upload artifact
+        run: mv dist/gpxconverter dist/gpxconverter-linux
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-linux
-          path: dist/gpxconverter
+          path: dist/gpxconverter-linux
 
   create-release:
     needs: [build-windows, build-macos, build-linux]
@@ -102,7 +106,7 @@ jobs:
       - name: Set release name and tag
         id: set-release
         run: |
-          DATE_TIME=$(date +%Y%m%d%H%M%S)
+          DATE_TIME=$(date +%Y%m%d_%H-%M-%S)
           echo "RELEASE_TAG=v1.0.${DATE_TIME}" >> $GITHUB_ENV
           echo "RELEASE_NAME=Release v1.0.${DATE_TIME}" >> $GITHUB_ENV
 
@@ -131,9 +135,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            ./artifacts/windows/gpxconverter.exe
-            ./artifacts/macos/gpxconverter
-            ./artifacts/linux/gpxconverter
+            ./artifacts/windows/gpxconverter-windows.exe
+            ./artifacts/macos/gpxconverter-macos
+            ./artifacts/linux/gpxconverter-linux
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.RELEASE_TAG }}
           name: ${{ env.RELEASE_NAME }}
