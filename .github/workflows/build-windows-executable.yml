@@ -41,4 +41,11 @@ jobs:
         git add toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
         git commit -m 'Add built executable'
         git push
+    - name: Package and Publish to GitHub Packages
+      run: |
+        mkdir -p pkg
+        cp toolbox/garmin-gps-file-converter/dist/gpxconverter.exe pkg/
+        cd pkg
+        zip gpxconverter.zip gpxconverter.exe
+        gh release create v1.0.0 gpxconverter.zip -p -t "GPX Converter" -n "GPX Converter Executable"
 
