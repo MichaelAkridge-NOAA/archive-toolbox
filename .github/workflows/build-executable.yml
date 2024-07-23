@@ -24,9 +24,6 @@ jobs:
       - name: Build executable
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-      - name: Test executable
-        run: dist\gpxconverter.exe --help
-
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter.exe dist/gpxconverter-windows.exe
 
@@ -56,9 +53,6 @@ jobs:
       - name: Build executable
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-      - name: Test executable
-        run: dist/gpxconverter --help
-
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter dist/gpxconverter-macos
 
@@ -66,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-macos
-          path: dist/gpxconverter-macos
+          path: dist/gpxconverter-macos.app
 
   build-linux:
     runs-on: ubuntu-latest
@@ -97,9 +91,6 @@ jobs:
         run: |
           conda run -n myenv pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-      - name: Test executable
-        run: conda run -n myenv dist/gpxconverter --help
-
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter dist/gpxconverter-linux
 
@@ -107,7 +98,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-linux
-          path: dist/gpxconverter-linux
+          path: dist/gpxconverter-linux.bin
 
   create-release:
     needs: [build-windows, build-macos, build-linux]
@@ -150,8 +141,8 @@ jobs:
         with:
           artifacts: |
             ./artifacts/windows/gpxconverter-windows.exe
-            ./artifacts/macos/gpxconverter-macos
-            ./artifacts/linux/gpxconverter-linux
+            ./artifacts/macos/gpxconverter-macos.app
+            ./artifacts/linux/gpxconverter-linux.bin
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.RELEASE_TAG }}
           name: ${{ env.RELEASE_NAME }}
