@@ -32,8 +32,8 @@ jobs:
 
     - name: Commit changes
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
         git add toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
         git commit -m 'Add built executable'
         git push
