@@ -1,0 +1,167 @@
+name: v3 Build Executables
+
+on:
+  workflow_dispatch: # Trigger workflow manually from GitHub Actions
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'  # Specify the Python version you need
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller numpy gooey
+
+    - name: Build executable
+      run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
+
+    - name: Move executable to desired folder
+      run: |
+        mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
+        mv dist/gpxconverter.exe ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: gpxconverter-windows
+        path: toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'  # Specify the Python version you need
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller numpy gooey
+
+    - name: Build executable
+      run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
+
+    - name: Move executable to desired folder
+      run: |
+        mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
+        mv dist/gpxconverter ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: gpxconverter-macos
+        path: toolbox/garmin-gps-file-converter/dist/gpxconverter
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'  # Specify the Python version you need
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller numpy gooey
+
+    - name: Build executable
+      run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
+
+    - name: Move executable to desired folder
+      run: |
+        mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
+        mv dist/gpxconverter ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: gpxconverter-linux
+        path: toolbox/garmin-gps-file-converter/dist/gpxconverter
+
+  create-release:
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download Windows artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: gpxconverter-windows
+        path: ./artifacts
+
+    - name: Download macOS artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: gpxconverter-macos
+        path: ./artifacts
+
+    - name: Download Linux artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: gpxconverter-linux
+        path: ./artifacts
+
+    - name: Create Release
+      id: create_release
+      uses: ncipollo/release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        title: Draft Test Release
+        tag_name: v1.0.1  # Update as necessary
+        release_name: Release v1.0.1
+        draft: true
+        prerelease: true
+
+    - name: Upload Windows Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
+        asset_name: gpxconverter-windows.exe
+        asset_content_type: application/octet-stream
+
+    - name: Upload macOS Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter
+        asset_name: gpxconverter-macos
+        asset_content_type: application/octet-stream
+
+    - name: Upload Linux Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter
+        asset_name: gpxconverter-linux
+        asset_content_type: application/octet-stream
+
