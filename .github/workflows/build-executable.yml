@@ -121,9 +121,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            ./artifacts/gpxconverter-windows/gpxconverter.exe
-            ./artifacts/gpxconverter-macos/gpxconverter
-            ./artifacts/gpxconverter-linux/gpxconverter
+            ./artifacts/gpxconverter.exe
+            ./artifacts/gpxconverter
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v1.0.1  # Update as necessary
           name: Release v1.0.1
