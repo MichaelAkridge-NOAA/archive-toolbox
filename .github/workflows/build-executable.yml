@@ -1,6 +1,4 @@
 name: v4 Build Executables
-name: Build Executables
-
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
 
