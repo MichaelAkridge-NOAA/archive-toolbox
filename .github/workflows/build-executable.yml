@@ -54,7 +54,7 @@ jobs:
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
       - name: Rename and Upload artifact
-        run: mv dist/gpxconverter dist/gpxconverter-macos
+        run: mv dist/gpxconverter dist/gpxconverter-macos.app
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -92,7 +92,7 @@ jobs:
           conda run -n myenv pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
       - name: Rename and Upload artifact
-        run: mv dist/gpxconverter dist/gpxconverter-linux
+        run: mv dist/gpxconverter dist/gpxconverter-linux.bin
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
