@@ -3,27 +3,30 @@ on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
 
 jobs:
-
-
   build-linux:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: '3.11'  # Specify the Python version you need
+          auto-update-conda: true
+          python-version: '3.11'
+          activate-environment: myenv
+          environment-file: environment.yml
+          auto-activate-base: false
 
-      - name: Install dependencies
+      - name: Create and activate conda environment
         run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller numpy gooey wxpython>=4.1.0
+          conda create -n myenv python=3.11 -y
+          conda activate myenv
+          conda install -c conda-forge pyinstaller numpy gooey -y
 
       - name: Build executable
-        run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
+        run: |
+          conda run -n myenv pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
