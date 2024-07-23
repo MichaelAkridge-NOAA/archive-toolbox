@@ -22,7 +22,7 @@ jobs:
         mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
         mv dist/gpxconverter.exe ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
     - name: Upload executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: gpxconverter-executable
         path: toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
