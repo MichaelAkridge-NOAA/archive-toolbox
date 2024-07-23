@@ -68,38 +68,6 @@ jobs:
         name: gpxconverter-macos
         path: toolbox/garmin-gps-file-converter/dist/gpxconverter
 
-  build-linux:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'  # Specify the Python version you need
-
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller numpy gooey
-        pip install wxpython --no-cache-dir --find-links https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/
-
-    - name: Build executable
-      run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
-
-    - name: Move executable to desired folder
-      run: |
-        mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
-        mv dist/gpxconverter ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: gpxconverter-linux
-        path: toolbox/garmin-gps-file-converter/dist/gpxconverter
-
   create-release:
     needs: [build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
@@ -120,11 +88,6 @@ jobs:
         name: gpxconverter-macos
         path: ./artifacts
 
-    - name: Download Linux artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: gpxconverter-linux
-        path: ./artifacts
 
     - name: Create Release
       id: create_release
@@ -156,15 +119,5 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter
         asset_name: gpxconverter-macos
-        asset_content_type: application/octet-stream
-
-    - name: Upload Linux Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/toolbox/garmin-gps-file-converter/dist/gpxconverter
-        asset_name: gpxconverter-linux
         asset_content_type: application/octet-stream
 
