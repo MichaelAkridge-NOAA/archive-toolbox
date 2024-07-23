@@ -24,6 +24,9 @@ jobs:
       - name: Build executable
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
+      - name: Test executable
+        run: dist\gpxconverter.exe --help
+
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter.exe dist/gpxconverter-windows.exe
 
@@ -52,6 +55,9 @@ jobs:
 
       - name: Build executable
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
+
+      - name: Test executable
+        run: dist/gpxconverter --help
 
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter dist/gpxconverter-macos
@@ -90,6 +96,9 @@ jobs:
       - name: Build executable
         run: |
           conda run -n myenv pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
+
+      - name: Test executable
+        run: conda run -n myenv dist/gpxconverter --help
 
       - name: Rename and Upload artifact
         run: mv dist/gpxconverter dist/gpxconverter-linux
