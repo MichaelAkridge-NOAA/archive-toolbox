@@ -2,7 +2,6 @@ name: Build Linux Exe with PyInstaller
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
 jobs:
-
   build-linux:
     runs-on: ubuntu-latest
 
@@ -14,13 +13,19 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          python-version: '3.11'
+          python-version: '3.9'
           auto-activate-base: true
 
       - name: Create and activate conda environment
         run: |
-          conda create -n myenv python=3.11 -y
-          conda run -n myenv conda install -c conda-forge pyinstaller numpy gooey wxpython -y
+          conda create -n myenv python=3.9 -y
+          conda run -n myenv conda install -c conda-forge pyinstaller numpy wxpython -y
+
+      - name: Install Gooey from source
+        run: |
+          conda run -n myenv git clone https://github.com/chriskiehl/Gooey.git
+          cd Gooey
+          conda run -n myenv python setup.py install
 
       - name: Build executable
         run: |
