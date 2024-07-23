@@ -4,7 +4,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -20,15 +19,15 @@ jobs:
         pip install pyinstaller numpy gooey
 
     - name: Build executable
-      run: pyinstaller -F dev/toolbox/garmin-gps-file-converter/gpxconverter.py  # Adjust path if gpxconverter.py is not in the root directory
+      run: pyinstaller -F /toolbox/garmin-gps-file-converter/gpxconverter.py  # Adjust path if gpxconverter.py is not in the root directory
 
     - name: Move executable to desired folder
       run: |
-        mkdir -p ${{ github.workspace }}/dev/toolbox/garmin-gps-file-converter/dist
-        mv dist/gpxconverter.exe ${{ github.workspace }}/dev/toolbox/garmin-gps-file-converter/dist/
+        mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
+        mv dist/gpxconverter.exe ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
 
     - name: Upload executable
       uses: actions/upload-artifact@v3
       with:
         name: gpxconverter-executable
-        path: dev/toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
+        path: /toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
