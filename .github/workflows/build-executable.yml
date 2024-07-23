@@ -103,26 +103,27 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-windows
-          path: ./artifacts
+          path: ./artifacts/windows
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-macos
-          path: ./artifacts
+          path: ./artifacts/macos
 
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
           name: gpxconverter-linux
-          path: ./artifacts
+          path: ./artifacts/linux
 
       - name: Create and Upload Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            ./artifacts/gpxconverter.exe
-            ./artifacts/gpxconverter
+            ./artifacts/windows/gpxconverter.exe
+            ./artifacts/macos/gpxconverter
+            ./artifacts/linux/gpxconverter
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v1.0.1  # Update as necessary
           name: Release v1.0.1
