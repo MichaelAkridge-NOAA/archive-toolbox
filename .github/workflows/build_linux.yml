@@ -15,7 +15,6 @@ jobs:
           auto-update-conda: true
           python-version: '3.11'
           activate-environment: myenv
-          environment-file: environment.yml
           auto-activate-base: false
 
       - name: Create and activate conda environment
