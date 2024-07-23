@@ -24,18 +24,11 @@ jobs:
     - name: Build executable
       run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-    - name: Move executable to desired folder
-      run: |
-        if (-Not (Test-Path -Path "${{ github.workspace }}\toolbox\garmin-gps-file-converter\dist")) {
-          New-Item -ItemType Directory -Path "${{ github.workspace }}\toolbox\garmin-gps-file-converter\dist"
-        }
-        Move-Item -Path "dist\gpxconverter.exe" -Destination "${{ github.workspace }}\toolbox\garmin-gps-file-converter\dist\gpxconverter.exe"
-
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: gpxconverter-windows
-        path: toolbox/garmin-gps-file-converter/dist/gpxconverter.exe
+        path: dist/gpxconverter.exe
 
   build-macos:
     runs-on: macos-latest
@@ -57,19 +50,49 @@ jobs:
     - name: Build executable
       run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
 
-    - name: Move executable to desired folder
-      run: |
-        mkdir -p ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist
-        mv dist/gpxconverter ${{ github.workspace }}/toolbox/garmin-gps-file-converter/dist/
-
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: gpxconverter-macos
-        path: toolbox/garmin-gps-file-converter/dist/gpxconverter
+        path: dist/gpxconverter
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: '3.11'
+          auto-activate-base: true
+
+      - name: Create and activate conda environment
+        run: |
+          conda create -n myenv python=3.11 -y
+          conda run -n myenv conda install -c conda-forge pyinstaller numpy wxpython -y
+
+      - name: Install Gooey from source
+        run: |
+          conda run -n myenv git clone https://github.com/chriskiehl/Gooey.git
+          cd Gooey
+          conda run -n myenv python setup.py install
+
+      - name: Build executable
+        run: |
+          conda run -n myenv pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas toolbox/garmin-gps-file-converter/gpxconverter.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: gpxconverter-linux
+          path: dist/gpxconverter
 
   create-release:
-    needs: [build-windows, build-macos]
+    needs: [build-windows, build-macos,build-linux]
     runs-on: ubuntu-latest
 
     steps:
@@ -88,16 +111,23 @@ jobs:
         name: gpxconverter-macos
         path: ./artifacts
 
+    - name: Download Linux artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: gpxconverter-linux
+        path: ./artifacts
+
     - name: Create and Upload Release
       uses: ncipollo/release-action@v1
       with:
         artifacts: |
           ./artifacts/gpxconverter-windows/gpxconverter.exe
           ./artifacts/gpxconverter-macos/gpxconverter
+          ./artifacts/gpxconverter-linux/gpxconverter
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: v1.0.1  # Update as necessary
-        name: Release v1.0.0
-        body: "Release notes for v1.0.1 TEST"
+        name: Release v1.0.1
+        body: "Release v1.0.1 TEST - GHA to build Exe files"
         draft: true
         prerelease: true
 
