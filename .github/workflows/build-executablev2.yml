@@ -40,8 +40,6 @@ jobs:
         with:
           nuitka-version: main
           script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
-          onefile: true
-          extra-options: "--macos-create-app-bundle --macos-disable-console"
 
       - name: Build Executable on Windows
         if: matrix.os == 'windows-latest'
