@@ -63,7 +63,7 @@ jobs:
           file_dir=$(dirname ${{ matrix.file }})
           if [ -f "$file_dir/requirements.txt" ]; then
             conda run -n myenv pip install -r $file_dir/requirements.txt
-          fi
+          fi`
 
       - name: Build executable (Windows)
         if: matrix.os == 'windows-latest'
@@ -102,12 +102,16 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
-          mv "dist/$base_name.exe" "dist/$base_name-windows.exe"
+          Write-Host "Base name is: $base_name"  # Debug line
+          Move-Item "dist/$base_name.exe" "dist/$base_name-windows.exe"
         shell: pwsh
 
       - name: Zip artifact (Windows)
         if: matrix.os == 'windows-latest'
-        run: powershell Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
+        run: |
+          $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+          Write-Host "Base name for zip is: $base_name"  # Debug line
+          Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
         shell: pwsh
 
       - name: Set artifact name (macOS and Linux)
