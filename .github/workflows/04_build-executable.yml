@@ -1,4 +1,4 @@
-name: 01 - Build Executables
+name: 04 - Build Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
