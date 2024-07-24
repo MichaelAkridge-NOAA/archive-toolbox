@@ -7,7 +7,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -20,11 +20,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies on Ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          python -m pip install --upgrade pip
-          pip install numpy gooey
 
       - name: Install Dependencies on macOS
         if: matrix.os == 'macos-latest'
@@ -38,13 +33,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy gooey
 
-      - name: Build Executable on Ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        uses: Nuitka/Nuitka-Action@main
-        with:
-          nuitka-version: main
-          script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
-          onefile: true
 
       - name: Build Executable on macOS
         if: matrix.os == 'macos-latest'
@@ -61,13 +49,6 @@ jobs:
           nuitka-version: main
           script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
           onefile: true
-
-      - name: Upload Artifacts on Ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v3
-        with:
-          name: gpxconverter-ubuntu
-          path: build/*.bin
 
       - name: Upload Artifacts on macOS
         if: matrix.os == 'macos-latest'
