@@ -1,4 +1,4 @@
-name: 04 - Build Executables
+name: 01 - Build Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
@@ -19,6 +19,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set file name without extension
+        id: set-filename
+        run: echo "FILE_NAME=$(basename ${{ matrix.file }} .py)" >> $GITHUB_ENV
 
       - name: Set up Python on Windows and macOS
         if: matrix.os != 'ubuntu-latest'
@@ -60,33 +64,34 @@ jobs:
 
       - name: Rename artifact
         run: |
-          FILE_NAME=$(basename ${{ matrix.file }} .py)
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            mv dist/$FILE_NAME.exe dist/$FILE_NAME-windows.exe;
+            mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe;
           elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            mv dist/$FILE_NAME dist/$FILE_NAME-macos;
+            mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-macos;
           else
-            mv dist/$FILE_NAME dist/$FILE_NAME-linux;
+            mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-linux;
           fi
 
       - name: Zip artifact
         run: |
-          FILE_NAME=$(basename ${{ matrix.file }} .py)
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            powershell Compress-Archive -Path dist\\$FILE_NAME-windows.exe -DestinationPath dist\\$FILE_NAME-windows.zip;
+            powershell Compress-Archive -Path dist\\${{ env.FILE_NAME }}-windows.exe -DestinationPath dist\\${{ env.FILE_NAME }}-windows.zip;
           else
-            zip -j dist/$FILE_NAME-${{ matrix.os }}.zip dist/$FILE_NAME-${{ matrix.os }};
+            zip -j dist/${{ env.FILE_NAME }}-${{ matrix.os }}.zip dist/${{ env.FILE_NAME }}-${{ matrix.os }};
           fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ basename(matrix.file) }}-${{ matrix.os }}
-          path: dist/${{ basename(matrix.file, '.py') }}-${{ matrix.os }}.zip
+          name: ${{ env.FILE_NAME }}-${{ matrix.os }}
+          path: dist/${{ env.FILE_NAME }}-${{ matrix.os }}.zip
 
   create-release:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Checkout repository
@@ -99,38 +104,16 @@ jobs:
           echo "RELEASE_TAG=v1.0.${DATE_TIME}" >> $GITHUB_ENV
           echo "RELEASE_NAME=Release v1.0.${DATE_TIME}" >> $GITHUB_ENV
 
-      - name: Download Windows artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: |
-            heic-heif-converter.py-windows-latest
-            mnftool_gui.py-windows-latest
-            filecopy_tool.py-windows-latest
-            folderstats.py-windows-latest
-            gpxconverter.py-windows-latest
-          path: ./artifacts/windows
-
-      - name: Download macOS artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: |
-            heic-heif-converter.py-macos-latest
-            mnftool_gui.py-macos-latest
-            filecopy_tool.py-macos-latest
-            folderstats.py-macos-latest
-            gpxconverter.py-macos-latest
-          path: ./artifacts/macos
-
-      - name: Download Linux artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: |
-            heic-heif-converter.py-ubuntu-latest
-            mnftool_gui.py-ubuntu-latest
-            filecopy_tool.py-ubuntu-latest
-            folderstats.py-ubuntu-latest
-            gpxconverter.py-ubuntu-latest
-          path: ./artifacts/linux
+            heic-heif-converter-${{ matrix.os }}
+            mnftool_gui-${{ matrix.os }}
+            filecopy_tool-${{ matrix.os }}
+            folderstats-${{ matrix.os }}
+            gpxconverter-${{ matrix.os }}
+          path: ./artifacts/${{ matrix.os }}
 
       - name: List downloaded artifacts
         run: ls -R ./artifacts
