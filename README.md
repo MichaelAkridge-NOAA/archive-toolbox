@@ -41,7 +41,6 @@ File copy tool will copy files and directories from one place to another.
 
 <br clear="right"/>
 
-
 <a href="./toolbox/garmin-gps-file-converter"><img align="right" src="./toolbox/garmin-gps-file-converter/_docs/s01.png" alt="garmin-gps-file-converter
 " width=400px></a>
 
@@ -50,14 +49,12 @@ File copy tool will copy files and directories from one place to another.
 
 <br clear="right"/>
 
+<a href="./toolbox/heic-heif-converter"><img align="right" src="./toolbox/heic-heif-converter/_docs/s1.png" alt="HEIC_HEIF_converter" width=400px></a>
 
-<a href="./toolbox/HEIC_HEIF_converter"><img align="right" src="./toolbox/HEIC_HEIF_converter/_docs/s1.png" alt="HEIC_HEIF_converter" width=400px></a>
-
-## <a href="./toolbox/HEIC_HEIF_converter">Batch HEIC/HEIF to JPG Converter</a>
+## <a href="./toolbox/heic-heif-converter">Batch HEIC/HEIF to JPG Converter</a>
 * Tool to batch convert HEIC/HEIF files to standard JPG file format
 
 <br clear="right"/>
-
 
 <a href="./toolbox/archive-manifest-file-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_01.png" alt="Manifest Tool" width=400px></a>
 
