@@ -1,4 +1,4 @@
-name: 04 - Build Executables
+name: 01 - Build Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
@@ -58,29 +58,27 @@ jobs:
           conda run -n myenv python setup.py install
 
       - name: Build executable
-        run: |
-          pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas ${{ matrix.file }}
+        run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas ${{ matrix.file }}
         shell: bash
 
       - name: Rename artifact
         run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe;
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
             mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-macos;
           else
             mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-linux;
           fi
+        shell: bash
 
-      - name: Zip artifact
-        run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            powershell Compress-Archive -Path dist\\${{ env.FILE_NAME }}-windows.exe -DestinationPath dist\\${{ env.FILE_NAME }}-windows.zip;
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            zip -j dist/${{ env.FILE_NAME }}-macos.zip dist/${{ env.FILE_NAME }}-macos;
-          else
-            zip -j dist/${{ env.FILE_NAME }}-linux.zip dist/${{ env.FILE_NAME }}-linux;
-          fi
+      - name: Zip artifact on Windows
+        if: matrix.os == 'windows-latest'
+        run: powershell Compress-Archive -Path dist\\${{ env.FILE_NAME }}-windows.exe -DestinationPath dist\\${{ env.FILE_NAME }}-windows.zip
+
+      - name: Zip artifact on macOS and Linux
+        if: matrix.os != 'windows-latest'
+        run: zip -j dist/${{ env.FILE_NAME }}-${{ matrix.os }}.zip dist/${{ env.FILE_NAME }}-${{ matrix.os }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
