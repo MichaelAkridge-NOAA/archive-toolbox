@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
         file: [
           'toolbox/heic-heif-converter/heic-heif-converter.py',
           'toolbox/archive-manifest-file-tool/mnftool_gui.py',
@@ -106,9 +106,14 @@ jobs:
           mv $exe_name dist/$base_name-linux
           zip -j dist/$base_name-linux.zip dist/$base_name-linux
 
-      - name: Set artifact name
-        id: set-artifact-name
-        run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)" >> $GITHUB_ENV
+      - name: Set artifact name (Windows)
+        if: matrix.os == 'windows-latest'
+        run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)-executables" >> $GITHUB_ENV
+        shell: pwsh
+
+      - name: Set artifact name (macOS and Linux)
+        if: matrix.os != 'windows-latest'
+        run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)-executables" >> $GITHUB_ENV
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
