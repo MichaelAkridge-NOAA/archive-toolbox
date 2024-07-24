@@ -51,14 +51,14 @@ jobs:
 
       - name: Upload Artifacts on macOS
         if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-macos
           path: build/*.app/**/*
 
       - name: Upload Artifacts on Windows
         if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gpxconverter-windows
           path: build/*.exe
