@@ -20,9 +20,6 @@ jobs:
         with:
           python-version: '3.11'
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-          cache: 'pip'
-          cache-dependency-path: |
-            **/requirements*.txt
 
       - name: Install Dependencies on macOS
         if: matrix.os == 'macos-latest'
@@ -50,6 +47,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
+          onefile-tempdir-spec= C:/Temp
 
       - name: Upload Artifacts on macOS
         if: matrix.os == 'macos-latest'
