@@ -101,9 +101,10 @@ jobs:
           zip -j dist/$base_name-linux.zip dist/$base_name-linux
 
       - name: Upload artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-${{ matrix.file | split: '/' | last | split: '.' | first }}
+          name: ${{ matrix.os }}-${{ matrix.file | split: '/' | last | split: '.' | first }}-executables
           path: dist/*.zip
           if-no-files-found: warn
           compression-level: 6
