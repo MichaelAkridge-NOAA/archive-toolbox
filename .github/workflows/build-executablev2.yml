@@ -1,12 +1,16 @@
-name: v2 Build Executables
+name:v2  Build Executables
+
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
+
 jobs:
   build:
     strategy:
       matrix:
         os: [windows-latest]
+
     runs-on: ${{ matrix.os }}
+
     steps:
       - name: Check-out repository
         uses: actions/checkout@v4
@@ -15,7 +19,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
       - name: Install Dependencies on macOS
         if: matrix.os == 'macos-latest'
@@ -42,19 +45,19 @@ jobs:
         with:
           nuitka-version: main
           script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
-          onefile-tempdir-spec= C:/Temp
+          onefile: true
+          onefile-tempdir-spec=C:/Temp
 
       - name: Upload Artifacts on macOS
         if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: gpxconverter-macos
           path: build/*.app/**/*
 
       - name: Upload Artifacts on Windows
         if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: gpxconverter-windows
           path: build/*.exe
-
