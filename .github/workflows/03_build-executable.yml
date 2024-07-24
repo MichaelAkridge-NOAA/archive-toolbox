@@ -114,22 +114,29 @@ jobs:
           Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
         shell: pwsh
 
+      - name: Set artifact name (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+          echo "ARTIFACT_NAME=${base_name}-windows" >> $GITHUB_ENV
+        shell: pwsh
+
       - name: Set artifact name (macOS and Linux)
         if: matrix.os != 'windows-latest'
         run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)" >> $GITHUB_ENV
 
-      - name: Upload artifact (Windows)
+      - name: Set artifact name (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
-          echo "name: ${base_name}-windows" > artifact_info.txt
+          echo "ARTIFACT_NAME=${base_name}-windows" >> $GITHUB_ENV
         shell: pwsh
 
-      - name: Upload artifact (Windows) - Actual
+      - name: Upload artifact (Windows)
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.upload-artifact.outputs.name }}
+          name: ${{ env.ARTIFACT_NAME }}
           path: dist/*.zip
           if-no-files-found: warn
           compression-level: 6
