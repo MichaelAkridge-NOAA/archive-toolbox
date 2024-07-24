@@ -1,4 +1,4 @@
-name: 12 - DEV
+name: 12 - Build All Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
@@ -24,12 +24,14 @@ jobs:
       - name: Set file name without extension
         id: set-filename
         run: |
-          FILE_NAME=$(basename ${{ matrix.file }} .py)
-          echo "FILE_NAME=${FILE_NAME}" >> $GITHUB_ENV
-          echo "Set FILE_NAME to ${FILE_NAME}"
+          $fileName = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+          echo "FILE_NAME=$fileName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+          echo "Set FILE_NAME to $fileName"
+        shell: pwsh
 
       - name: Debug - Check FILE_NAME environment variable
-        run: echo "FILE_NAME is ${{ env.FILE_NAME }}"
+        run: echo "FILE_NAME is $env:FILE_NAME"
+        shell: pwsh
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -46,15 +48,20 @@ jobs:
 
       - name: Debug - List dist directory
         run: dir dist
+        shell: pwsh
 
       - name: Debug - Show FILE_NAME before renaming
         run: echo "Renaming dist/${{ env.FILE_NAME }}.exe to dist/${{ env.FILE_NAME }}-windows.exe"
+        shell: pwsh
 
       - name: Rename artifact
-        run: mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe
+        run: |
+          mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe
+        shell: bash
 
       - name: Debug - List dist directory after rename
         run: dir dist
+        shell: pwsh
 
       - name: Zip artifact
         run: powershell Compress-Archive -Path dist\\${{ env.FILE_NAME }}-windows.exe -DestinationPath dist\\${{ env.FILE_NAME }}-windows.zip
