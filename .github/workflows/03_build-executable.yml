@@ -98,22 +98,34 @@ jobs:
           mv $exe_name dist/$base_name-linux
           zip -j dist/$base_name-linux.zip dist/$base_name-linux
 
-      - name: Rename and zip artifact (Windows)
+      - name: Rename artifact (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
-          $exe_name = "dist/$base_name.exe"
-          Move-Item $exe_name "dist/$base_name-windows.exe"
-          Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
-          $artifact_name = "windows-latest-$base_name"
-          echo "ARTIFACT_NAME=$artifact_name" >> $GITHUB_ENV
+          mv "dist/$base_name.exe" "dist/$base_name-windows.exe"
+        shell: pwsh
+
+      - name: Zip artifact (Windows)
+        if: matrix.os == 'windows-latest'
+        run: powershell Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
         shell: pwsh
 
       - name: Set artifact name (macOS and Linux)
         if: matrix.os != 'windows-latest'
         run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)-executables" >> $GITHUB_ENV
 
+      - name: Upload artifact (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.file }}-windows
+          path: dist/*.zip
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+
       - name: Upload artifact
+        if: matrix.os != 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
