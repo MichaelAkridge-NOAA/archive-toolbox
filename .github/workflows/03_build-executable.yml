@@ -26,20 +26,22 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies (Windows)
+      - name: Install dependencies and pyinstaller (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           $file_dir = Split-Path "${{ matrix.file }}"
           python -m pip install --upgrade pip
           pip install -r "$file_dir\requirements.txt"
+          pip install pyinstaller
         shell: pwsh
 
-      - name: Install dependencies (macOS)
+      - name: Install dependencies and pyinstaller (macOS)
         if: matrix.os == 'macos-latest'
         run: |
           file_dir=$(dirname ${{ matrix.file }})
           python -m pip install --upgrade pip
           pip install -r $file_dir/requirements.txt
+          pip install pyinstaller
 
       - name: Set up Miniconda (Linux)
         if: matrix.os == 'ubuntu-latest'
@@ -49,7 +51,7 @@ jobs:
           python-version: '3.11'
           auto-activate-base: true
 
-      - name: Create and activate conda environment (Linux)
+      - name: Create and activate conda environment and install pyinstaller (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
           conda create -n myenv python=3.11 -y
@@ -153,4 +155,3 @@ jobs:
           body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
           draft: true
           prerelease: true
-
