@@ -1,0 +1,133 @@
+name: 04 - Build Executables
+
+on:
+  workflow_dispatch: # Trigger workflow manually from GitHub Actions
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+        file: [
+          'toolbox/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/folder-stats-tool/folderstats.py',
+          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+        ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python on Windows and macOS
+        if: matrix.os != 'ubuntu-latest'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Miniconda on Linux
+        if: matrix.os == 'ubuntu-latest'
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: '3.11'
+          auto-activate-base: true
+
+      - name: Create and activate conda environment on Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          conda create -n myenv python=3.11 -y
+          conda run -n myenv conda install -c conda-forge pyinstaller numpy wxpython -y
+
+      - name: Install dependencies on Windows and macOS
+        if: matrix.os != 'ubuntu-latest'
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller numpy gooey
+
+      - name: Install Gooey from source on Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          conda run -n myenv git clone https://github.com/chriskiehl/Gooey.git
+          cd Gooey
+          conda run -n myenv python setup.py install
+
+      - name: Build executable
+        run: |
+          pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas ${{ matrix.file }}
+        shell: bash
+
+      - name: Rename artifact
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            mv dist/${{ matrix.file | split('/')[-1] | replace('.py', '.exe') }} dist/${{ matrix.file | split('/')[-1] | replace('.py', '-windows.exe') }};
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+            mv dist/${{ matrix.file | split('/')[-1] | replace('.py', '') }} dist/${{ matrix.file | split('/')[-1] | replace('.py', '-macos') }};
+          else
+            mv dist/${{ matrix.file | split('/')[-1] | replace('.py', '') }} dist/${{ matrix.file | split('/')[-1] | replace('.py', '-linux') }};
+          fi
+
+      - name: Zip artifact
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            powershell Compress-Archive -Path dist\\${{ matrix.file | split('/')[-1] | replace('.py', '-windows.exe') }} -DestinationPath dist\\${{ matrix.file | split('/')[-1] | replace('.py', '-windows.zip') }};
+          else
+            zip -j dist/${{ matrix.file | split('/')[-1] | replace('.py', '-${{ matrix.os }}') }}.zip dist/${{ matrix.file | split('/')[-1] | replace('.py', '-${{ matrix.os }}') }};
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.file | split('/')[-1] | replace('.py', '-${{ matrix.os }}') }}
+          path: dist/${{ matrix.file | split('/')[-1] | replace('.py', '-${{ matrix.os }}') }}.zip
+
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set release name and tag
+        id: set-release
+        run: |
+          DATE_TIME=$(date +%Y%m%d_%H-%M-%S)
+          echo "RELEASE_TAG=v1.0.${DATE_TIME}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Release v1.0.${DATE_TIME}" >> $GITHUB_ENV
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.file | split('/')[-1] | replace('.py', '-windows-latest') }}
+          path: ./artifacts/windows
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.file | split('/')[-1] | replace('.py', '-macos-latest') }}
+          path: ./artifacts/macos
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.file | split('/')[-1] | replace('.py', '-ubuntu-latest') }}
+          path: ./artifacts/linux
+
+      - name: List downloaded artifacts
+        run: ls -R ./artifacts
+
+      - name: Create and Upload Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: |
+            ./artifacts/windows/*.zip
+            ./artifacts/macos/*.zip
+            ./artifacts/linux/*.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_NAME }}
+          body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
+          draft: true
+          prerelease: true
