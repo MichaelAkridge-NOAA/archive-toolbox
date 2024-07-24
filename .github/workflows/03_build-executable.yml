@@ -55,7 +55,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           conda create -n myenv python=3.11 -y
-          conda run -n myenv conda install -c conda-forge pyinstaller -y
+          conda run -n myenv conda install -c conda-forge pyinstaller wxpython -y
           conda run -n myenv git clone https://github.com/chriskiehl/Gooey.git
           cd Gooey
           conda run -n myenv python setup.py install
