@@ -103,7 +103,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-${{ matrix.file }}-executables
+          name: ${{ matrix.os }}-${{ matrix.file | split: '/' | last | split: '.' | first }}
           path: dist/*.zip
           if-no-files-found: warn
           compression-level: 6
@@ -158,3 +158,4 @@ jobs:
           body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
           draft: true
           prerelease: true
+
