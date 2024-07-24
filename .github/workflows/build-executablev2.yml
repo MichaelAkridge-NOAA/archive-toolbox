@@ -1,4 +1,4 @@
-name:v2  Build Executables
+name: v2  Build Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
