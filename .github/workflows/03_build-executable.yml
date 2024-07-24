@@ -116,7 +116,7 @@ jobs:
 
       - name: Set artifact name (macOS and Linux)
         if: matrix.os != 'windows-latest'
-        run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)-executables" >> $GITHUB_ENV
+        run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)" >> $GITHUB_ENV
 
       - name: Upload artifact (Windows)
         if: matrix.os == 'windows-latest'
