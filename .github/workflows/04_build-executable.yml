@@ -1,4 +1,4 @@
-name: 04 - Build Executables
+name: 01 - Build Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         file: [
           'toolbox/heic-heif-converter/heic-heif-converter.py',
           'toolbox/archive-manifest-file-tool/mnftool_gui.py',
@@ -61,15 +61,20 @@ jobs:
         run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas ${{ matrix.file }}
         shell: bash
 
-      - name: Rename artifact
+      - name: Rename artifact on Windows
+        if: matrix.os == 'windows-latest'
         run: |
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe;
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-macos;
-          else
-            mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-linux;
-          fi
+          mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe
+        shell: bash
+
+      - name: Rename artifact on macOS
+        if: matrix.os == 'macos-latest'
+        run: mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-macos
+        shell: bash
+
+      - name: Rename artifact on Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: mv dist/${{ env.FILE_NAME }} dist/${{ env.FILE_NAME }}-linux
         shell: bash
 
       - name: Zip artifact on Windows
@@ -91,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Checkout repository
@@ -131,3 +136,4 @@ jobs:
           body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
           draft: true
           prerelease: true
+
