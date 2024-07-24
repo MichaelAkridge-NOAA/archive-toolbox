@@ -105,7 +105,7 @@ jobs:
 
       - name: Set artifact name
         id: set-artifact-name
-        run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)-executables" >> $GITHUB_ENV
+        run: echo "ARTIFACT_NAME=${{ matrix.os }}-$(basename ${{ matrix.file }} .py)" >> $GITHUB_ENV
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
