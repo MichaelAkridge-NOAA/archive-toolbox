@@ -1,0 +1,140 @@
+name: 03 - Build All Executables
+
+on:
+  workflow_dispatch: # Trigger workflow manually from GitHub Actions
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        file: [
+          'toolbox/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/folder-stats-tool/folderstats.py',
+          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+        ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies (Windows and macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: |
+          file_dir=$(dirname ${{ matrix.file }})
+          python -m pip install --upgrade pip
+          pip install -r $file_dir/requirements.txt
+
+      - name: Set up Miniconda (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: '3.11'
+          auto-activate-base: true
+
+      - name: Create and activate conda environment (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          conda create -n myenv python=3.11 -y
+          conda run -n myenv conda install -c conda-forge pyinstaller -y
+          file_dir=$(dirname ${{ matrix.file }})
+          conda run -n myenv pip install -r $file_dir/requirements.txt
+
+      - name: Build executable (Windows and macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: |
+          pyinstaller -F --strip --exclude-module tkinter ${{ matrix.file }}
+
+      - name: Build executable (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          conda run -n myenv pyinstaller -F --strip --exclude-module tkinter ${{ matrix.file }}
+
+      - name: Rename and zip artifact (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          base_name=$(basename ${{ matrix.file }} .py)
+          exe_name=dist/$base_name.exe
+          mv $exe_name dist/$base_name-windows.exe
+          powershell Compress-Archive -Path dist\\$base_name-windows.exe -DestinationPath dist\\$base_name-windows.zip
+
+      - name: Rename and zip artifact (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          base_name=$(basename ${{ matrix.file }} .py)
+          exe_name=dist/$base_name
+          mv $exe_name dist/$base_name-macos
+          zip -j dist/$base_name-macos.zip dist/$base_name-macos
+
+      - name: Rename and zip artifact (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          base_name=$(basename ${{ matrix.file }} .py)
+          exe_name=dist/$base_name
+          mv $exe_name dist/$base_name-linux
+          zip -j dist/$base_name-linux.zip dist/$base_name-linux
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-executables
+          path: dist/*.zip
+
+  create-release:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set release name and tag
+        id: set-release
+        run: |
+          DATE_TIME=$(date +%Y%m%d_%H.%M.%S)
+          echo "RELEASE_TAG=v1.0.${DATE_TIME}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Release v1.0.${DATE_TIME}" >> $GITHUB_ENV
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-latest-executables
+          path: ./artifacts/windows
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-latest-executables
+          path: ./artifacts/macos
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-latest-executables
+          path: ./artifacts/linux
+
+      - name: List downloaded artifacts
+        run: ls -R ./artifacts
+
+      - name: Create and Upload Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: |
+            ./artifacts/windows/*.zip
+            ./artifacts/macos/*.zip
+            ./artifacts/linux/*.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_NAME }}
+          body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
+          draft: true
+          prerelease: true
