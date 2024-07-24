@@ -1,0 +1,67 @@
+name: 12 - DEV
+
+on:
+  workflow_dispatch: # Trigger workflow manually from GitHub Actions
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+        file: [
+          'toolbox/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/folder-stats-tool/folderstats.py',
+          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+        ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set file name without extension
+        id: set-filename
+        run: |
+          FILE_NAME=$(basename ${{ matrix.file }} .py)
+          echo "FILE_NAME=${FILE_NAME}" >> $GITHUB_ENV
+          echo "Set FILE_NAME to ${FILE_NAME}"
+
+      - name: Debug - Check FILE_NAME environment variable
+        run: echo "FILE_NAME is ${{ env.FILE_NAME }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller numpy gooey
+
+      - name: Build executable
+        run: pyinstaller -F --strip --exclude-module tkinter --exclude-module pandas ${{ matrix.file }}
+
+      - name: Debug - List dist directory
+        run: dir dist
+
+      - name: Debug - Show FILE_NAME before renaming
+        run: echo "Renaming dist/${{ env.FILE_NAME }}.exe to dist/${{ env.FILE_NAME }}-windows.exe"
+
+      - name: Rename artifact
+        run: mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe
+
+      - name: Debug - List dist directory after rename
+        run: dir dist
+
+      - name: Zip artifact
+        run: powershell Compress-Archive -Path dist\\${{ env.FILE_NAME }}-windows.exe -DestinationPath dist\\${{ env.FILE_NAME }}-windows.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILE_NAME }}-windows
+          path: dist/${{ env.FILE_NAME }}-windows.zip
+
