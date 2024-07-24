@@ -26,8 +26,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies (Windows and macOS)
-        if: matrix.os != 'ubuntu-latest'
+      - name: Install dependencies (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          $file_dir = Split-Path "${{ matrix.file }}"
+          python -m pip install --upgrade pip
+          pip install -r "$file_dir\requirements.txt"
+        shell: pwsh
+
+      - name: Install dependencies (macOS)
+        if: matrix.os == 'macos-latest'
         run: |
           file_dir=$(dirname ${{ matrix.file }})
           python -m pip install --upgrade pip
@@ -49,8 +57,14 @@ jobs:
           file_dir=$(dirname ${{ matrix.file }})
           conda run -n myenv pip install -r $file_dir/requirements.txt
 
-      - name: Build executable (Windows and macOS)
-        if: matrix.os != 'ubuntu-latest'
+      - name: Build executable (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          pyinstaller -F --strip --exclude-module tkinter ${{ matrix.file }}
+        shell: pwsh
+
+      - name: Build executable (macOS)
+        if: matrix.os == 'macos-latest'
         run: |
           pyinstaller -F --strip --exclude-module tkinter ${{ matrix.file }}
 
@@ -62,10 +76,11 @@ jobs:
       - name: Rename and zip artifact (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          base_name=$(basename ${{ matrix.file }} .py)
-          exe_name=dist/$base_name.exe
-          mv $exe_name dist/$base_name-windows.exe
-          powershell Compress-Archive -Path dist\\$base_name-windows.exe -DestinationPath dist\\$base_name-windows.zip
+          $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+          $exe_name = "dist/$base_name.exe"
+          Move-Item $exe_name "dist/$base_name-windows.exe"
+          Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
+        shell: pwsh
 
       - name: Rename and zip artifact (macOS)
         if: matrix.os == 'macos-latest'
@@ -138,3 +153,4 @@ jobs:
           body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
           draft: true
           prerelease: true
+
