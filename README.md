@@ -92,8 +92,8 @@ File copy tool will copy files and directories from one place to another.
 ### NOAA Open Data Dissemination (NODD) Workflow
 ![](./_docs/icons/nodd_workflow.png "")
 
-### <a href="./toolbox/NODD_Upload_Tool/nodd_upload_tool.py">NODD GUI Upload Tool</a>
-<a href="./toolbox/NODD_Upload_Tool/nodd_upload_tool.py"><img src="_docs/icons/nodd_app_01.png" alt="NODD Upload Tool" ></a>
+### <a href="./toolbox/NODD-Google-Cloud-Tools/NODD_Desktop_Upload_Tool/nodd_upload_tool.py">NODD GUI Upload Tool</a>
+<a href="./toolbox/NODD-Google-Cloud-Tools/NODD_Desktop_Upload_Tool/nodd_upload_tool.py"><img src="_docs/icons/nodd_app_01.png" alt="NODD Upload Tool" ></a>
 
 ## Requirements 
 * GSUTIL backend: https://cloud.google.com/storage/docs/gsutil_install
