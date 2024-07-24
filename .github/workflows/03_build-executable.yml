@@ -81,14 +81,6 @@ jobs:
         run: |
           conda run -n myenv pyinstaller -F --strip --exclude-module tkinter ${{ matrix.file }}
 
-      - name: Rename and zip artifact (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
-          $exe_name = "dist/$base_name.exe"
-          Move-Item $exe_name "dist/$base_name-windows.exe"
-          Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
-        shell: pwsh
 
       - name: Rename and zip artifact (macOS)
         if: matrix.os == 'macos-latest'
@@ -106,10 +98,13 @@ jobs:
           mv $exe_name dist/$base_name-linux
           zip -j dist/$base_name-linux.zip dist/$base_name-linux
 
-      - name: Set artifact name (Windows)
+      - name: Rename and zip artifact (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+          $exe_name = "dist/$base_name.exe"
+          Move-Item $exe_name "dist/$base_name-windows.exe"
+          Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
           $artifact_name = "windows-latest-$base_name"
           echo "ARTIFACT_NAME=$artifact_name" >> $GITHUB_ENV
         shell: pwsh
