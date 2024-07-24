@@ -1,4 +1,4 @@
-name: 04 - Build Executables
+name: 01 - Build Executables
 
 on:
   workflow_dispatch: # Trigger workflow manually from GitHub Actions
@@ -76,8 +76,10 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
             powershell Compress-Archive -Path dist\\${{ env.FILE_NAME }}-windows.exe -DestinationPath dist\\${{ env.FILE_NAME }}-windows.zip;
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+            zip -j dist/${{ env.FILE_NAME }}-macos.zip dist/${{ env.FILE_NAME }}-macos;
           else
-            zip -j dist/${{ env.FILE_NAME }}-${{ matrix.os }}.zip dist/${{ env.FILE_NAME }}-${{ matrix.os }};
+            zip -j dist/${{ env.FILE_NAME }}-linux.zip dist/${{ env.FILE_NAME }}-linux;
           fi
 
       - name: Upload artifact
@@ -91,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest]
 
     steps:
       - name: Checkout repository
@@ -131,4 +133,3 @@ jobs:
           body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
           draft: true
           prerelease: true
-
