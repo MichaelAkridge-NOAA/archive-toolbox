@@ -120,9 +120,16 @@ jobs:
 
       - name: Upload artifact (Windows)
         if: matrix.os == 'windows-latest'
+        run: |
+          $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+          echo "name: ${base_name}-windows" > artifact_info.txt
+        shell: pwsh
+
+      - name: Upload artifact (Windows) - Actual
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ base_name }}-windows
+          name: ${{ steps.upload-artifact.outputs.name }}
           path: dist/*.zip
           if-no-files-found: warn
           compression-level: 6
