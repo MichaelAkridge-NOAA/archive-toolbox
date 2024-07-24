@@ -45,7 +45,6 @@ jobs:
         with:
           nuitka-version: main
           script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
-          onefile: true
           onefile-tempdir-spec:C:/Temp
 
       - name: Upload Artifacts on macOS
