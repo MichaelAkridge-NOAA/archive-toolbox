@@ -41,6 +41,8 @@ jobs:
           nuitka-version: main
           script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
           onefile: true
+          macos-create-app-bundle: true 
+          macos-disable-console: true
 
       - name: Build Executable on Windows
         if: matrix.os == 'windows-latest'
@@ -49,8 +51,6 @@ jobs:
           nuitka-version: main
           script-name: toolbox/garmin-gps-file-converter/gpxconverter.py
           onefile: true
-          macos-create-app-bundle: true 
-          macos-disable-console: true
 
       - name: Upload Artifacts on macOS
         if: matrix.os == 'macos-latest'
