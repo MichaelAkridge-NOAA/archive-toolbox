@@ -103,8 +103,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-executables
+          name: ${{ matrix.os }}-${{ matrix.file }}-executables
           path: dist/*.zip
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
 
   create-release:
     needs: [build]
