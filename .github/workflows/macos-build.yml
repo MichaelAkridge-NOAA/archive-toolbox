@@ -1,12 +1,10 @@
 name: macOS Build
-
 on:
   workflow_call:
     inputs:
       file:
         required: true
         type: string
-
 jobs:
   build:
     runs-on: macos-latest
@@ -36,9 +34,14 @@ jobs:
     - name: Build executable
       run: pyinstaller --onefile "${{ inputs.file }}"
 
+    - name: Zip artifacts
+      run: |
+        zip -r ${{ env.FILE_NAME }}-macos.zip dist/*
+        echo "Zipped artifacts to ${{ env.FILE_NAME }}-macos.zip"
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.FILE_NAME }}-macos
-        path: dist/${{ env.FILE_NAME }}-macos.zip
+        path: ${{ env.FILE_NAME }}-macos.zip
 

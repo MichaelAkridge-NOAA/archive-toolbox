@@ -1,12 +1,10 @@
 name: Linux Build
-
 on:
   workflow_call:
     inputs:
       file:
         required: true
         type: string
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,9 +42,15 @@ jobs:
     - name: Build executable
       run: conda run -n myenv pyinstaller --onefile "${{ inputs.file }}"
 
+    - name: Zip artifacts
+      run: |
+        zip -r ${{ env.FILE_NAME }}-linux.zip dist/*
+        echo "Zipped artifacts to ${{ env.FILE_NAME }}-linux.zip"
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.FILE_NAME }}-linux
-        path: dist/${{ env.FILE_NAME }}-linux.zip
+        path: ${{ env.FILE_NAME }}-linux.zip
+
 

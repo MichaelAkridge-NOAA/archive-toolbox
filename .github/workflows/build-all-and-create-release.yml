@@ -4,15 +4,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-windows-build:
+  call-linux-build:
     strategy:
       matrix:
         file: [
+          'toolbox/heic-heif-converter/heic-heif-converter.py',
           'toolbox/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/folder-stats-tool/folderstats.py',
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
 
-    uses: ./.github/workflows/windows-build.yml
+    uses: ./.github/workflows/linux-build.yml
     with:
       file: ${{ matrix.file }}
 
