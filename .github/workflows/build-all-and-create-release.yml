@@ -47,7 +47,7 @@ jobs:
     - name: Create and Upload Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: ./artifacts/*
+        artifacts: ./artifacts/*.zip
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ env.RELEASE_TAG }}
         name: ${{ env.RELEASE_NAME }}
