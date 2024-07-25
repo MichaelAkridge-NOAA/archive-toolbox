@@ -40,7 +40,7 @@ jobs:
         fi
 
     - name: Build executable
-      run: conda run -n myenv pyinstaller --onefile "${{ inputs.file }}"
+      run: conda run -n myenv pyinstaller --onefile --strip --strip-debug --exclude-module tkinter "${{ inputs.file }}"
 
     - name: Zip artifacts
       run: |
