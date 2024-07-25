@@ -1,4 +1,4 @@
-name: 🧹 00 - Remove All Expired Workflow Runs
+name: 00 - 🧹 Remove All Expired Workflow Runs
 on:
   #schedule: [{ cron: "30 1 * * *" }] # Schedule to run the workflow every day at 1:30 AM
   workflow_dispatch:
