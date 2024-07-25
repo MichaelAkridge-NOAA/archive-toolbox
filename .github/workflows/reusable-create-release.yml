@@ -1,0 +1,55 @@
+name: ♻️ Reusable - 🏷️ Create Release
+on:
+  workflow_call:
+    inputs:
+      windows-artifact:
+        required: true
+        type: string
+      macos-artifact:
+        required: true
+        type: string
+      linux-artifact:
+        required: true
+        type: string
+jobs:
+  create-release:
+    name: 🏷️ Create Release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set release name and tag
+      id: set-release
+      run: |
+        DATE_TIME=$(date +%Y%m%d_%H-%M-%S)
+        echo "RELEASE_TAG=v1.0.${DATE_TIME}" >> $GITHUB_ENV
+        echo "RELEASE_NAME=Release v1.0.${DATE_TIME}" >> $GITHUB_ENV
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: |
+          ${{ inputs.windows-artifact }}
+          ${{ inputs.macos-artifact }}
+          ${{ inputs.linux-artifact }}
+        path: ./artifacts/
+
+    - name: List downloaded artifacts
+      run: ls -R ./artifacts
+
+    - name: Create and Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: './artifacts/**/*.zip'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ env.RELEASE_TAG }}
+        name: ${{ env.RELEASE_NAME }}
+        body: |
+          ### Release ${{ env.RELEASE_NAME }}
+          This release includes the following builds:
+          - Windows
+          - macOS
+          - Linux
+        draft: true
+        prerelease: true
