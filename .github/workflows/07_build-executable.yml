@@ -80,28 +80,6 @@ jobs:
     - name: Build executable
       run: pyinstaller --onefile "${{ matrix.file }}"
 
-    - name: Rename and zip artifact (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        base_name=$env:FILE_NAME
-        mv "dist/$base_name.exe" "dist/$base_name-windows.exe"
-        Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
-      shell: pwsh
-
-    - name: Rename and zip artifact (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        base_name=${{ env.FILE_NAME }}
-        mv dist/$base_name dist/$base_name-macos
-        zip -j dist/$base_name-macos.zip dist/$base_name-macos
-
-    - name: Rename and zip artifact (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        base_name=${{ env.FILE_NAME }}
-        mv dist/$base_name dist/$base_name-linux
-        zip -j dist/$base_name-linux.zip dist/$base_name-linux
-
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
