@@ -10,7 +10,7 @@ jobs:
       matrix:
         os: [windows-latest]
         file: [
-          'toolbox/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/garmin-gps-file-converter/gpxconverter.py'
           'toolbox/archive-manifest-file-tool/mnftool_gui.py'
         ]
 
