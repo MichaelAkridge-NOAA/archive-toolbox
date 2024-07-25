@@ -5,6 +5,7 @@ on:
 
 jobs:
   call-windows-build:
+    name: 🏢 Build on Windows
     strategy:
       matrix:
         file: [
@@ -20,6 +21,7 @@ jobs:
       file: ${{ matrix.file }}
 
   call-macos-build:
+    name: 🍏 Build on macOS
     strategy:
       matrix:
         file: [
@@ -35,6 +37,7 @@ jobs:
       file: ${{ matrix.file }}
 
   call-linux-build:
+    name: 🐧 Build on Linux
     strategy:
       matrix:
         file: [
@@ -49,8 +52,8 @@ jobs:
     with:
       file: ${{ matrix.file }}
 
-
   create-release:
+    name: 🏷️ Create Release
     needs: [call-windows-build, call-macos-build, call-linux-build]
     runs-on: ubuntu-latest
     steps:
@@ -81,6 +84,11 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ env.RELEASE_TAG }}
         name: ${{ env.RELEASE_NAME }}
-        body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
+        body: |
+          ### Release ${{ env.RELEASE_NAME }}
+          This release includes the following builds:
+          - Windows
+          - macOS
+          - Linux
         draft: true
         prerelease: true
