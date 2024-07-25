@@ -99,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [macos-latest]
 
     steps:
     - name: Checkout repository
@@ -116,7 +116,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: ${{ env.FILE_NAME }}-${{ matrix.os }}
-        path: ./artifacts/${{ matrix.os }}
+        path: ./artifacts/
 
     - name: List downloaded artifacts
       run: ls -R ./artifacts
