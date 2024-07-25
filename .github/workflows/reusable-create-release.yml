@@ -13,7 +13,7 @@ on:
         type: string
 jobs:
   create-release:
-    name: 🏷️ Create Release
+    name: ♻️ Reusable -🏷️ Create Release
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
