@@ -22,14 +22,12 @@ jobs:
     - name: Set file name without extension
       id: set-filename
       run: |
-        $fileName = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
-        echo "FILE_NAME=$fileName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+        fileName=$(basename ${{ matrix.file }} .py)
+        echo "FILE_NAME=$fileName" >> $GITHUB_ENV
         echo "Set FILE_NAME to $fileName"
-      shell: pwsh
 
     - name: Debug - Check FILE_NAME environment variable
-      run: echo "FILE_NAME is $env:FILE_NAME"
-      shell: pwsh
+      run: echo "FILE_NAME is ${{ env.FILE_NAME }}"
 
     - name: Set up Python on Windows and macOS
       if: matrix.os != 'ubuntu-latest'
@@ -40,11 +38,10 @@ jobs:
     - name: Install dependencies and pyinstaller (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        $file_dir = Split-Path "${{ matrix.file }}"
+        file_dir=$(dirname "${{ matrix.file }}")
         python -m pip install --upgrade pip
-        pip install -r "$file_dir\\requirements.txt"
+        pip install -r "$file_dir/requirements.txt"
         pip install pyinstaller
-      shell: pwsh
 
     - name: Install dependencies and pyinstaller (macOS)
       if: matrix.os == 'macos-latest'
@@ -70,17 +67,14 @@ jobs:
         conda run -n myenv pip install -r "$(dirname ${{ matrix.file }})/requirements.txt"
 
     - name: Build executable
-      run: |
-        pyinstaller --onefile "${{ matrix.file }}"
-      shell: pwsh
+      run: pyinstaller --onefile "${{ matrix.file }}"
 
     - name: Rename and zip artifact (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        $base_name = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+        base_name=$(basename ${{ matrix.file }} .py)
         mv "dist/$base_name.exe" "dist/$base_name-windows.exe"
         Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
-      shell: pwsh
 
     - name: Rename and zip artifact (macOS)
       if: matrix.os == 'macos-latest'
@@ -99,7 +93,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.os }}
+        name: ${{ env.FILE_NAME }}-${{ matrix.os }}
         path: dist/*.zip
 
   create-release:
@@ -119,19 +113,17 @@ jobs:
     - name: Download Windows artifacts
       uses: actions/download-artifact@v4
       with:
-        name: windows-latest-executables
+        name: folderstats-windows-latest
         path: ./artifacts/windows
-
     - name: Download macOS artifacts
       uses: actions/download-artifact@v4
       with:
-        name: macos-latest-executables
+        name: folderstats-macos-latest
         path: ./artifacts/macos
-
     - name: Download Linux artifacts
       uses: actions/download-artifact@v4
       with:
-        name: ubuntu-latest-executables
+        name: folderstats-ubuntu-latest
         path: ./artifacts/linux
 
     - name: List downloaded artifacts
@@ -150,3 +142,4 @@ jobs:
         body: Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files
         draft: true
         prerelease: true
+
