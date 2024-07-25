@@ -19,35 +19,6 @@ jobs:
     with:
       file: ${{ matrix.file }}
 
-  call-macos-build:
-    strategy:
-      matrix:
-        file: [
-          'toolbox/heic-heif-converter/heic-heif-converter.py',
-          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool.py',
-          'toolbox/folder-stats-tool/folderstats.py',
-          'toolbox/garmin-gps-file-converter/gpxconverter.py'
-        ]
-
-    uses: ./.github/workflows/macos-build.yml
-    with:
-      file: ${{ matrix.file }}
-
-  call-linux-build:
-    strategy:
-      matrix:
-        file: [
-          'toolbox/heic-heif-converter/heic-heif-converter.py',
-          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool.py',
-          'toolbox/folder-stats-tool/folderstats.py',
-          'toolbox/garmin-gps-file-converter/gpxconverter.py'
-        ]
-
-    uses: ./.github/workflows/linux-build.yml
-    with:
-      file: ${{ matrix.file }}
 
   create-release:
     needs: [call-windows-build, call-macos-build, call-linux-build]
@@ -68,8 +39,6 @@ jobs:
       with:
         name: |
           ${{ needs.call-windows-build.outputs.artifact_name }}
-          ${{ needs.call-macos-build.outputs.artifact_name }}
-          ${{ needs.call-linux-build.outputs.artifact_name }}
         path: ./artifacts/
 
     - name: List downloaded artifacts
