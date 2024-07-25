@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: 🏗️ Building ${{ inputs.file }} on Windows
     runs-on: windows-latest
     steps:
     - name: Checkout repository

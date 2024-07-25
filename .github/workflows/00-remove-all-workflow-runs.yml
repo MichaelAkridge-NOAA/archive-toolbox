@@ -5,7 +5,7 @@ on:
 
 jobs:
   clean:
-    name: Delete Expired Workflow Runs
+    name: Remove Expired Workflow Runs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Action Code
