@@ -40,7 +40,7 @@ jobs:
         fi
 
     - name: Build executable
-      run: conda run -n myenv pyinstaller --onefile --strip "${{ inputs.file }}"
+      run: conda run -n myenv pyinstaller --onefile --strip --clean "${{ inputs.file }}"
 
     - name: Zip artifacts
       run: |
