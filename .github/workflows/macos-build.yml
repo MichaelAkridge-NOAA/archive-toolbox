@@ -1,0 +1,44 @@
+name: macOS Build
+
+on:
+  workflow_call:
+    inputs:
+      file:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set file name without extension
+      id: set-filename
+      run: |
+        fileName=$(basename ${{ inputs.file }} .py)
+        echo "FILE_NAME=$fileName" >> $GITHUB_ENV
+        echo "Set FILE_NAME to $fileName"
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies and pyinstaller
+      run: |
+        file_dir=$(dirname ${{ inputs.file }})
+        python -m pip install --upgrade pip
+        pip install -r $file_dir/requirements.txt
+        pip install pyinstaller
+
+    - name: Build executable
+      run: pyinstaller --onefile "${{ inputs.file }}"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.FILE_NAME }}-macos
+        path: dist/
+

@@ -1,0 +1,52 @@
+name: Linux Build
+
+on:
+  workflow_call:
+    inputs:
+      file:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set file name without extension
+      id: set-filename
+      run: |
+        fileName=$(basename ${{ inputs.file }} .py)
+        echo "FILE_NAME=$fileName" >> $GITHUB_ENV
+        echo "Set FILE_NAME to $fileName"
+
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        auto-update-conda: true
+        python-version: '3.11'
+        auto-activate-base: true
+
+    - name: Create and activate conda environment and install pyinstaller
+      run: |
+        conda create -n myenv python=3.11 -y
+        conda run -n myenv conda install -c conda-forge pyinstaller wxpython -y
+        conda run -n myenv git clone https://github.com/chriskiehl/Gooey.git
+        cd Gooey
+        conda run -n myenv python setup.py install
+        cd ..
+        file_dir=$(dirname ${{ inputs.file }})
+        if [ -f "$file_dir/requirements.txt" ]; then
+          conda run -n myenv pip install -r $file_dir/requirements.txt
+        fi
+
+    - name: Build executable
+      run: conda run -n myenv pyinstaller --onefile "${{ inputs.file }}"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.FILE_NAME }}-linux
+        path: dist/
+

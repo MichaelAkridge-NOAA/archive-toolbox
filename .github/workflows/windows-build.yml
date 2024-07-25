@@ -1,0 +1,46 @@
+name: Windows Build
+
+on:
+  workflow_call:
+    inputs:
+      file:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set file name without extension
+      id: set-filename
+      run: |
+        $fileName = [System.IO.Path]::GetFileNameWithoutExtension("${{ inputs.file }}")
+        echo "FILE_NAME=$fileName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+        echo "Set FILE_NAME to $fileName"
+      shell: pwsh
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies and pyinstaller
+      run: |
+        $file_dir = Split-Path "${{ inputs.file }}"
+        python -m pip install --upgrade pip
+        pip install -r "$file_dir\\requirements.txt"
+        pip install pyinstaller
+      shell: pwsh
+
+    - name: Build executable
+      run: pyinstaller --onefile "${{ inputs.file }}"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.FILE_NAME }}-windows
+        path: dist/
+

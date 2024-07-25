@@ -1,0 +1,87 @@
+name: Build All Executables
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-windows-build:
+    strategy:
+      matrix:
+        file: [
+          'toolbox/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/folder-stats-tool/folderstats.py',
+          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+        ]
+
+    uses: ./.github/workflows/windows-build.yml
+    with:
+      file: ${{ matrix.file }}
+
+  call-macos-build:
+    strategy:
+      matrix:
+        file: [
+          'toolbox/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/folder-stats-tool/folderstats.py',
+          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+        ]
+
+    uses: ./.github/workflows/macos-build.yml
+    with:
+      file: ${{ matrix.file }}
+
+  call-linux-build:
+    strategy:
+      matrix:
+        file: [
+          'toolbox/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/folder-stats-tool/folderstats.py',
+          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+        ]
+
+    uses: ./.github/workflows/linux-build.yml
+    with:
+      file: ${{ matrix.file }}
+
+  create-release:
+    needs: [call-windows-build, call-macos-build, call-linux-build]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set release name and tag
+      id: set-release
+      run: |
+        DATE_TIME=$(date +%Y%m%d_%H-%M-%S)
+        echo "RELEASE_TAG=v1.0.${DATE_TIME}" >> $GITHUB_ENV
+        echo "RELEASE_NAME=Release v1.0.${DATE_TIME}" >> $GITHUB_ENV
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: |
+          ${{ needs.call-windows-build.outputs.artifact_name }}
+          ${{ needs.call-macos-build.outputs.artifact_name }}
+          ${{ needs.call-linux-build.outputs.artifact_name }}
+        path: ./artifacts/
+
+    - name: List downloaded artifacts
+      run: ls -R ./artifacts
+
+    - name: Create and Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: ./artifacts/*
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ env.RELEASE_TAG }}
+        name: ${{ env.RELEASE_NAME }}
+        body: "Release ${{ env.RELEASE_NAME }} TEST - GHA to build Exe files"
+        draft: true
+        prerelease: true
