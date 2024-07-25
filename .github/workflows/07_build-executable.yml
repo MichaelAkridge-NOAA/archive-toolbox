@@ -84,7 +84,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.FILE_NAME }}-${{ matrix.os }}
-        path: dist/*.zip
+        path: dist/
 
   create-release:
     needs: build
