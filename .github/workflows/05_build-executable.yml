@@ -59,9 +59,6 @@ jobs:
         run: dir dist
         shell: pwsh
 
-      - name: Zip artifact
-        run: powershell Compress-Archive -Path dist\\${{ env.FILE_NAME }}-windows.exe -DestinationPath dist\\${{ env.FILE_NAME }}.zip
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
