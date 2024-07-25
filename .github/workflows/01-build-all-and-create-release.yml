@@ -1,4 +1,4 @@
-name: Build All and Create Release
+name: 01 - Build All Executables and Create Release
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
 
-    uses: ./.github/workflows/windows-build.yml
+    uses: ./.github/workflows/reusable/reusable-windows-build.yml
     with:
       file: ${{ matrix.file }}
 
@@ -30,7 +30,7 @@ jobs:
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
 
-    uses: ./.github/workflows/macos-build.yml
+    uses: ./.github/workflows/reusable/reusable-macos-build.yml
     with:
       file: ${{ matrix.file }}
 
@@ -45,7 +45,7 @@ jobs:
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
 
-    uses: ./.github/workflows/linux-build.yml
+    uses: ./.github/workflows/reusable/reusable-linux-build.yml
     with:
       file: ${{ matrix.file }}
 
