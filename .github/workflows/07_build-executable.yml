@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Generate Build Artifacts
+    name: Build
     strategy:
       matrix:
         os: [windows-latest]
@@ -19,8 +19,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set file name without extension
-      id: set-filename
+    - name: Set file name without extension (Windows)
+      if: matrix.os == 'windows-latest'
+      id: set-filename-windows
+      run: |
+        $fileName = [System.IO.Path]::GetFileNameWithoutExtension("${{ matrix.file }}")
+        echo "FILE_NAME=$fileName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+        echo "Set FILE_NAME to $fileName"
+      shell: pwsh
+
+    - name: Set file name without extension (Unix)
+      if: matrix.os != 'windows-latest'
+      id: set-filename-unix
       run: |
         fileName=$(basename ${{ matrix.file }} .py)
         echo "FILE_NAME=$fileName" >> $GITHUB_ENV
@@ -38,10 +48,11 @@ jobs:
     - name: Install dependencies and pyinstaller (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        file_dir=$(dirname "${{ matrix.file }}")
+        $file_dir = Split-Path "${{ matrix.file }}"
         python -m pip install --upgrade pip
-        pip install -r "$file_dir/requirements.txt"
+        pip install -r "$file_dir\\requirements.txt"
         pip install pyinstaller
+      shell: pwsh
 
     - name: Install dependencies and pyinstaller (macOS)
       if: matrix.os == 'macos-latest'
@@ -72,21 +83,22 @@ jobs:
     - name: Rename and zip artifact (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        base_name=$(basename ${{ matrix.file }} .py)
+        base_name=$env:FILE_NAME
         mv "dist/$base_name.exe" "dist/$base_name-windows.exe"
         Compress-Archive -Path "dist/$base_name-windows.exe" -DestinationPath "dist/$base_name-windows.zip"
+      shell: pwsh
 
     - name: Rename and zip artifact (macOS)
       if: matrix.os == 'macos-latest'
       run: |
-        base_name=$(basename ${{ matrix.file }} .py)
+        base_name=${{ env.FILE_NAME }}
         mv dist/$base_name dist/$base_name-macos
         zip -j dist/$base_name-macos.zip dist/$base_name-macos
 
     - name: Rename and zip artifact (Linux)
       if: matrix.os == 'ubuntu-latest'
       run: |
-        base_name=$(basename ${{ matrix.file }} .py)
+        base_name=${{ env.FILE_NAME }}
         mv dist/$base_name dist/$base_name-linux
         zip -j dist/$base_name-linux.zip dist/$base_name-linux
 
@@ -113,17 +125,19 @@ jobs:
     - name: Download Windows artifacts
       uses: actions/download-artifact@v4
       with:
-        name: folderstats-windows-latest
+        name: gpxconverter-windows-latest
         path: ./artifacts/windows
+
     - name: Download macOS artifacts
       uses: actions/download-artifact@v4
       with:
-        name: folderstats-macos-latest
+        name: gpxconverter-macos-latest
         path: ./artifacts/macos
+
     - name: Download Linux artifacts
       uses: actions/download-artifact@v4
       with:
-        name: folderstats-ubuntu-latest
+        name: gpxconverter-ubuntu-latest
         path: ./artifacts/linux
 
     - name: List downloaded artifacts
