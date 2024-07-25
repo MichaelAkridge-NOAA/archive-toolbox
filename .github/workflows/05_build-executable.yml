@@ -55,9 +55,8 @@ jobs:
         shell: pwsh
 
       - name: Rename artifact
-        run: |
-          mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe
-        shell: bash
+        run: mv dist/${{ env.FILE_NAME }}.exe dist/${{ env.FILE_NAME }}-windows.exe
+        shell: pwsh
 
       - name: Debug - List dist directory after rename
         run: dir dist
