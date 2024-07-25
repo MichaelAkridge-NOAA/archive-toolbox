@@ -15,7 +15,7 @@ jobs:
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
 
-    uses: ./.github/workflows/reusable/reusable-windows-build.yml
+    uses: MichaelAkridge-NOAA/archive-toolbox/.github/workflows/reusable/reusable-windows-build.yml@main
     with:
       file: ${{ matrix.file }}
 
@@ -30,7 +30,7 @@ jobs:
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
 
-    uses: ./.github/workflows/reusable/reusable-macos-build.yml
+    uses: MichaelAkridge-NOAA/archive-toolbox/.github/workflows/reusable/reusable-macos-build.yml@main
     with:
       file: ${{ matrix.file }}
 
@@ -45,7 +45,7 @@ jobs:
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
 
-    uses: ./.github/workflows/reusable/reusable-linux-build.yml
+    uses: MichaelAkridge-NOAA/archive-toolbox/.github/workflows/reusable/reusable-linux-build.yml@main
     with:
       file: ${{ matrix.file }}
 
