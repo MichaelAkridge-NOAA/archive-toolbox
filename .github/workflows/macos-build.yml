@@ -40,5 +40,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.FILE_NAME }}-macos
-        path: dist/
+        path: dist/${{ env.FILE_NAME }}-macos.zip
 
