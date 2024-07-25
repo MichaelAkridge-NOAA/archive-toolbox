@@ -11,10 +11,7 @@ jobs:
         os: [windows-latest]
         file: [
           'toolbox/heic-heif-converter/heic-heif-converter.py',
-          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool.py',
-          'toolbox/folder-stats-tool/folderstats.py',
-          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+          'toolbox/archive-manifest-file-tool/mnftool_gui.py'
         ]
 
     steps:
