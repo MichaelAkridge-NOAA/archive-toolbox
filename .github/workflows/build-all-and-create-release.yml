@@ -21,7 +21,7 @@ jobs:
 
 
   create-release:
-    needs: [call-windows-build, call-macos-build, call-linux-build]
+    needs: [call-windows-build]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
