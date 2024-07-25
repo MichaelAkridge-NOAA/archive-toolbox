@@ -38,6 +38,12 @@ jobs:
     - name: Build executable
       run: pyinstaller --onefile "${{ inputs.file }}"
 
+    - name: Zip artifacts
+      run: |
+        powershell Compress-Archive -Path dist\* -DestinationPath $env:FILE_NAME-windows.zip
+        echo "Zipped artifacts to $env:FILE_NAME-windows.zip"
+      shell: pwsh
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
