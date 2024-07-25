@@ -1,4 +1,4 @@
-name: Reusable - macOS Build
+name: ♻️ Reusable - 🍏 macOS Build
 on:
   workflow_call:
     inputs:

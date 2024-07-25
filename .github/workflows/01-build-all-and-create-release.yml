@@ -1,4 +1,4 @@
-name: 01 - Build All and Create Release
+name: 01 - 🚀 Build All and Create Release
 
 on:
   workflow_dispatch:

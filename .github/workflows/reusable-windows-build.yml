@@ -1,4 +1,4 @@
-name: Reusable - Windows Build
+name: ♻️ Reusable - 🏢 Windows Build
 
 on:
   workflow_call:

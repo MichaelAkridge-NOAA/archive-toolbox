@@ -1,4 +1,4 @@
-name: Reusable - Linux Build
+name: ♻️ Reusable - 🐧Linux Build
 on:
   workflow_call:
     inputs:
