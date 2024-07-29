@@ -1,10 +1,9 @@
-<img align="right" src="_docs/icons/logo_archive_toolboxv3_500.png" alt="Manifest Tool" >
-
 # ESD/ARP Archive Toolbox
+<img align="right" src="_docs/icons/logo_archive_toolboxv3_500.png" alt="Manifest Tool" >
 Collection of Tools, Workflows and Processes to help Facilitate Archiving Scientific Data.
 * Contact: Michael.Akridge@noaa.gov
 
-# Table of Contents
+### Table of Contents
 1. **[Archive Tools](#archive-tools)**
     * [File Copy Tool](#file-copy-tool)
     * [Folder Stats Tool](#folder-stats-tool)
@@ -12,18 +11,17 @@ Collection of Tools, Workflows and Processes to help Facilitate Archiving Scient
     * [Batch HEIC/HEIF to JPG Converter](#batch-heicheif-to-jpg-converter)
     * [Archive Manifest File Tool](#archive-manifest-file-tool)
     * [Other Archive Tools](#other-archive-tools)
-2. **[Google Cloud Platform Upload Tools](#google-cloud-platform-upload-tools)**
+2. **[Google Cloud Tools](#google-cloud-platform-upload-tools)**
     * [NOAA Open Data Dissemination (NODD) Workflow](#noaa-open-data-dissemination-nodd-workflow)
     * [NODD GUI Upload Tool](#nodd-gui-upload-tool)
     * [Simple NODD Upload Script Example ](#simple-nodd-upload-script-example)
     * [Simple NODD Download Script Example](#simple-nodd-download-script-example)
     * [NODD Details](#nodd-details)
 ***
-
 # Archive Tools
 <a href="./toolbox/file-copy-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_00.png" alt="File Copy" width=400px></a>
 
-## <a href="./toolbox/file-copy-tool">File Copy Tool</a>
+### <a href="./toolbox/file-copy-tool">File Copy Tool</a>
 File copy tool will copy files and directories from one place to another. 
 * It uses a subprocess to call a windows robust file copy command
 * The app will skip any existing files in a destination directory
@@ -35,7 +33,7 @@ File copy tool will copy files and directories from one place to another.
 
 <a href="./toolbox/folder-stats-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_02.png" alt="Folder Stats" width=400px></a>
 
-## <a href="./toolbox/folder-stats-tool">Folder Stats Tool</a>
+### <a href="./toolbox/folder-stats-tool">Folder Stats Tool</a>
 * Lightweight,python based, tool to gather folder stats like name, path, and size
 * Exports a CSV of folder stats
 
@@ -44,21 +42,21 @@ File copy tool will copy files and directories from one place to another.
 <a href="./toolbox/garmin-gps-file-converter"><img align="right" src="./toolbox/garmin-gps-file-converter/_docs/s01.png" alt="garmin-gps-file-converter
 " width=400px></a>
 
-## <a href="./toolbox/garmin-gps-file-converter">Garmin GPS File(GPX)Converter</a>
+### <a href="./toolbox/garmin-gps-file-converter">Garmin GPS File(GPX)Converter</a>
 * Tool to convert Garmin GPS files(GPX) to standard CSV/TXT file format
 
 <br clear="right"/>
 
 <a href="./toolbox/heic-heif-converter"><img align="right" src="./toolbox/heic-heif-converter/_docs/s1.png" alt="HEIC_HEIF_converter" width=400px></a>
 
-## <a href="./toolbox/heic-heif-converter">Batch HEIC/HEIF to JPG Converter</a>
+### <a href="./toolbox/heic-heif-converter">Batch HEIC/HEIF to JPG Converter</a>
 * Tool to batch convert HEIC/HEIF files to standard JPG file format
 
 <br clear="right"/>
 
 <a href="./toolbox/archive-manifest-file-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_01.png" alt="Manifest Tool" width=400px></a>
 
-## <a href="./toolbox/archive-manifest-file-tool">Archive Manifest File Tool </a>
+### <a href="./toolbox/archive-manifest-file-tool">Archive Manifest File Tool</a>
 * Tool to Verify or Generate Archive Manifest Files 
 * Required when sending archive packages
 ### Manifest File Details  
@@ -74,15 +72,15 @@ File copy tool will copy files and directories from one place to another.
 <br clear="right"/>
 
 ## Other Archive Tools
-### PIFSC Centralized Data Tools - NCEI Tools Libary 
-* PHP based tools. Data packager, bagit data packager, and submission manifest tools. 
-* placeholder - link coming soon - placeholder
 ### Send2NCEI(S2N) 
 * Send2NCEI (S2N) is an archiving tool that allows you to easily submit your data files and related documentation to the National Centers for Environmental Information for long term preservation, stewardship, and access. 
 * https://www.ncei.noaa.gov/archive/send2ncei/
 ### Advanced Tracking and Resource Tool for Archive Collections (ATRAC)
 * The Advanced Tracking and Resource tool for Archive Collections (ATRAC) provides a common interface for users to enter and display information on archiving projects at the NOAA National Centers for Environmental Information (NCEI).
 * https://www.ncdc.noaa.gov/atrac/guidelines.html
+### PIFSC Centralized Data Tools - NCEI Tools Libary 
+* PHP based tools. Data packager, bagit data packager, and submission manifest tools. 
+* placeholder - link coming soon - placeholder
 ----------
 
 # Google Cloud Platform Upload Tools
