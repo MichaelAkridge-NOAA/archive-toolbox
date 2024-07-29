@@ -1,7 +1,8 @@
 # ESD/ARP Archive Toolbox
 <img align="right" src="_docs/icons/logo_archive_toolboxv3_500.png" alt="Manifest Tool" >
 Collection of Tools, Workflows and Processes to help Facilitate Archiving Scientific Data.
-* Contact: Michael.Akridge@noaa.gov
+
+- Contact: Michael.Akridge@noaa.gov
 
 ### Table of Contents
 1. **[Archive Tools](#archive-tools)**
