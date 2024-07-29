@@ -27,7 +27,7 @@ jobs:
         file: [
           'toolbox/heic-heif-converter/heic-heif-converter.py',
           'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/file-copy-tool/filecopy_tool_v2.py',
           'toolbox/folder-stats-tool/folderstats.py',
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
@@ -43,7 +43,7 @@ jobs:
         file: [
           'toolbox/heic-heif-converter/heic-heif-converter.py',
           'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool.py',
+          'toolbox/file-copy-tool/filecopy_tool_v2.py',
           'toolbox/folder-stats-tool/folderstats.py',
           'toolbox/garmin-gps-file-converter/gpxconverter.py'
         ]
