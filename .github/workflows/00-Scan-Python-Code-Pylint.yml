@@ -1,4 +1,4 @@
-name: 00-Scan-Python-Code-Pylint
+name: 00 - 🔍🐍 Scan Python Code w/ Pylint
 on:
   workflow_dispatch:
 jobs:
