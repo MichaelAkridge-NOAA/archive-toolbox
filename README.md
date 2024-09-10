@@ -20,9 +20,9 @@ Collection of Tools, Workflows and Processes to help Facilitate Archiving Scient
     * [NODD Details](#nodd-details)
 ***
 # Archive Tools
-<a href="./toolbox/file-copy-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_00.png" alt="File Copy" width=400px></a>
+<a href="./toolbox/desktop/file-copy-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_00.png" alt="File Copy" width=400px></a>
 
-### <a href="./toolbox/file-copy-tool">File Copy Tool</a>
+### <a href="./toolbox/desktop/file-copy-tool">File Copy Tool</a>
 File copy tool will copy files and directories from one place to another. 
 * It uses a subprocess to call a windows robust file copy command
 * The app will skip any existing files in a destination directory
@@ -32,32 +32,32 @@ File copy tool will copy files and directories from one place to another.
 
 <br clear="right"/>
 
-<a href="./toolbox/folder-stats-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_02.png" alt="Folder Stats" width=400px></a>
+<a href="./toolbox/desktop/folder-stats-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_02.png" alt="Folder Stats" width=400px></a>
 
-### <a href="./toolbox/folder-stats-tool">Folder Stats Tool</a>
+### <a href="./toolbox/desktop/folder-stats-tool">Folder Stats Tool</a>
 * Lightweight,python based, tool to gather folder stats like name, path, and size
 * Exports a CSV of folder stats
 
 <br clear="right"/>
 
-<a href="./toolbox/garmin-gps-file-converter"><img align="right" src="./toolbox/garmin-gps-file-converter/_docs/s01.png" alt="garmin-gps-file-converter
+<a href="./toolbox/desktop/garmin-gps-file-converter"><img align="right" src="./toolbox/desktop/garmin-gps-file-converter/_docs/s01.png" alt="garmin-gps-file-converter
 " width=400px></a>
 
-### <a href="./toolbox/garmin-gps-file-converter">Garmin GPS File(GPX)Converter</a>
+### <a href="./toolbox/desktop/garmin-gps-file-converter">Garmin GPS File(GPX)Converter</a>
 * Tool to convert Garmin GPS files(GPX) to standard CSV/TXT file format
 
 <br clear="right"/>
 
-<a href="./toolbox/heic-heif-converter"><img align="right" src="./toolbox/heic-heif-converter/_docs/s1.png" alt="HEIC_HEIF_converter" width=400px></a>
+<a href="./toolbox/desktop/heic-heif-converter"><img align="right" src="./toolbox/desktop/heic-heif-converter/_docs/s1.png" alt="HEIC_HEIF_converter" width=400px></a>
 
-### <a href="./toolbox/heic-heif-converter">Batch HEIC/HEIF to JPG Converter</a>
+### <a href="./toolbox/desktop/heic-heif-converter">Batch HEIC/HEIF to JPG Converter</a>
 * Tool to batch convert HEIC/HEIF files to standard JPG file format
 
 <br clear="right"/>
 
-<a href="./toolbox/archive-manifest-file-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_01.png" alt="Manifest Tool" width=400px></a>
+<a href="./toolbox/desktop/archive-manifest-file-tool"><img align="right" src="./_docs/icons/sfm_toolbox_tool_01.png" alt="Manifest Tool" width=400px></a>
 
-### <a href="./toolbox/archive-manifest-file-tool">Archive Manifest File Tool</a>
+### <a href="./toolbox/desktop/archive-manifest-file-tool">Archive Manifest File Tool</a>
 * Tool to Verify or Generate Archive Manifest Files 
 * Required when sending archive packages
 ### Manifest File Details  
@@ -88,8 +88,8 @@ File copy tool will copy files and directories from one place to another.
 ### NOAA Open Data Dissemination (NODD) Workflow
 ![](./_docs/icons/nodd_workflow.png "")
 
-### <a href="./toolbox/NODD-Google-Cloud-Tools/NODD_Desktop_Upload_Tool/nodd_upload_tool.py">NODD GUI Upload Tool</a>
-<a href="./toolbox/NODD-Google-Cloud-Tools/NODD_Desktop_Upload_Tool/nodd_upload_tool.py"><img src="_docs/icons/nodd_app_01.png" alt="NODD Upload Tool" ></a>
+### <a href="./toolbox/cloud/NODD_Desktop_Upload_Tool/nodd_upload_tool.py">NODD GUI Upload Tool</a>
+<a href="./toolbox/cloud/NODD_Desktop_Upload_Tool/nodd_upload_tool.py"><img src="_docs/icons/nodd_app_01.png" alt="NODD Upload Tool" ></a>
 
 ## Requirements 
 * GSUTIL backend: https://cloud.google.com/storage/docs/gsutil_install

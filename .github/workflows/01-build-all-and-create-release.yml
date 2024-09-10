@@ -9,11 +9,11 @@ jobs:
     strategy:
       matrix:
         file: [
-          'toolbox/heic-heif-converter/heic-heif-converter.py',
-          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool.py',
-          'toolbox/folder-stats-tool/folderstats.py',
-          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+          'toolbox/desktop/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/desktop/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/desktop/file-copy-tool/filecopy_tool.py',
+          'toolbox/desktop/folder-stats-tool/folderstats.py',
+          'toolbox/desktop/garmin-gps-file-converter/gpxconverter.py'
         ]
 
     uses: ./.github/workflows/reusable-windows-build.yml
@@ -25,11 +25,11 @@ jobs:
     strategy:
       matrix:
         file: [
-          'toolbox/heic-heif-converter/heic-heif-converter.py',
-          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool_v2.py',
-          'toolbox/folder-stats-tool/folderstats.py',
-          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+          'toolbox/desktop/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/desktop/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/desktop/file-copy-tool/filecopy_tool_v2.py',
+          'toolbox/desktop/folder-stats-tool/folderstats.py',
+          'toolbox/desktop/garmin-gps-file-converter/gpxconverter.py'
         ]
 
     uses: ./.github/workflows/reusable-macos-build.yml
@@ -41,11 +41,11 @@ jobs:
     strategy:
       matrix:
         file: [
-          'toolbox/heic-heif-converter/heic-heif-converter.py',
-          'toolbox/archive-manifest-file-tool/mnftool_gui.py',
-          'toolbox/file-copy-tool/filecopy_tool_v2.py',
-          'toolbox/folder-stats-tool/folderstats.py',
-          'toolbox/garmin-gps-file-converter/gpxconverter.py'
+          'toolbox/desktop/heic-heif-converter/heic-heif-converter.py',
+          'toolbox/desktop/archive-manifest-file-tool/mnftool_gui.py',
+          'toolbox/desktop/file-copy-tool/filecopy_tool_v2.py',
+          'toolbox/desktop/folder-stats-tool/folderstats.py',
+          'toolbox/desktop/garmin-gps-file-converter/gpxconverter.py'
         ]
 
     uses: ./.github/workflows/reusable-linux-build.yml
