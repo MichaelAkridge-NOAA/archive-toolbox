@@ -1,7 +1,7 @@
 # PIFSC/ESD NOAA Cloud | How to Download
-## Prerequisites : Install Google Command Line Tool: Gsutil
+## Prerequisites : Install Google Command Line Tool(Gsutil) via the Google SDK installer
 - Install:
-  - https://cloud.google.com/storage/docs/gsutil_install
+  - https://cloud.google.com/storage/docs/gsutil_install#sdk-install
 
 ## Step 1: Browse Data via PIFSC Cloud Console 
 - PIFSC Cloud Console URL
