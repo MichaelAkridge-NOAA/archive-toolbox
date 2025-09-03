@@ -86,11 +86,20 @@ File copy tool will copy files and directories from one place to another.
 
 # Google Cloud Platform Upload Tools
 ### NOAA Jetstream
-<img align="right" src="./toolbox/cloud/jetstream/_icons/jetstream_logo_400px.png" alt="jetstream" >
+
+<a href="./toolbox/cloud/jetstream/README.md"><img align="right" src="./toolbox/cloud/jetstream/_icons/jetstream_logo_400px.png" alt="jetstream" ></a>
 A simple python app to copy a local folder into a Google Cloud Storage (GCS) bucket. Pick a source folder, enter your bucket path, choose where to save a log, and click Start.
 
-<a href="./jetstream.py"><img src="./toolbox/cloud/jetstream/_icons/screenshot.png" alt="NODD Upload Tool" ></a>
+## Tool Details 
+* Syncs local data to Google Cloud Platform Storage using Google's gsutil backend
+* Customizable gsutil command generation
+* Logging and output message management
+* Configurable parameters including dry run, multi-threading, and recursion
+* A graphical user interface (GUI)
+* Users can interact with the GUI to specify the source and destination paths, adjust threading, select a dry run, and decide whether to print or run the gsutil command.
+* The main function fetches user input, configures the logger, and executes the copy process or prints the gsutil command based on user preference.
 
+<a href="./toolbox/cloud/jetstream/README.md"><img src="./toolbox/cloud/jetstream/_icons/screenshot.png" alt="Upload Tool" ></a>
 
 
 ### NOAA Open Data Dissemination (NODD) Workflow
@@ -103,15 +112,6 @@ A simple python app to copy a local folder into a Google Cloud Storage (GCS) buc
 * GSUTIL backend: https://cloud.google.com/storage/docs/gsutil_install
 * GCP Storage Bucket Permissions
 * Python 3 and various packages
-
-## Tool Details 
-* syncs local data to Google Cloud Platform Storage using Google's gsutil backend
-* Customizable gsutil command generation
-* Logging and output message management
-* Configurable parameters including dry run, multi-threading, and recursion
-* A graphical user interface (GUI) is built using the Gooey library.
-* Users can interact with the GUI to specify the source and destination paths, adjust threading, select a dry run, and decide whether to print or run the gsutil command.
-* The main function fetches user input, configures the logger, and executes the copy process or prints the gsutil command based on user preference.
 
 ### Simple NODD Upload Script Example
 
