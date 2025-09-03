@@ -104,7 +104,7 @@ A simple python app to copy a local folder into a Google Cloud Storage (GCS) buc
 gsutil -m rsync -r  C:\local_data_path gs://<bucket_name>/<destination_folder_path>
 ```
 
-<a href="./toolbox/cloud/jetstream/README.md"><img src="./toolbox/cloud/jetstream/_icons/screenshot.png" alt="Upload Tool" ></a>
+<a href="./toolbox/cloud/jetstream/jetstream.py"><img src="./toolbox/cloud/jetstream/_icons/screenshot.png" alt="Upload Tool" ></a>
 
 
 ### NOAA Open Data Dissemination (NODD) Workflow
