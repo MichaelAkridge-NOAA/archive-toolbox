@@ -2,7 +2,7 @@
 <img align="right" src="_icons/jetstream_logo_400px.png" alt="jetstream" >
 A simple python app to copy a local folder into a Google Cloud Storage (GCS) bucket. Pick a source folder, enter your bucket path, choose where to save a log, and click Start.
 
-## What you need (one time install)
+### What you need (one time install)
 - Google Cloud SDK (includes gsutil)
 - Python 3.10+
 - Permissions to the target bucket
