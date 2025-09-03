@@ -101,6 +101,11 @@ A simple python app to copy a local folder into a Google Cloud Storage (GCS) buc
 
 <a href="./toolbox/cloud/jetstream/README.md"><img src="./toolbox/cloud/jetstream/_icons/screenshot.png" alt="Upload Tool" ></a>
 
+### Simple Upload Script Example
+
+```
+gsutil -m rsync -r  C:\local_data_path gs://<bucket_name>/<destination_folder_path>
+```
 
 ### NOAA Open Data Dissemination (NODD) Workflow
 ![](./_docs/icons/nodd_workflow.png "")
