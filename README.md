@@ -85,6 +85,14 @@ File copy tool will copy files and directories from one place to another.
 ----------
 
 # Google Cloud Platform Upload Tools
+### NOAA Jetstream
+<img align="right" src="./toolbox/cloud/jetstream/_icons/jetstream_logo_400px.png" alt="jetstream" >
+A simple python app to copy a local folder into a Google Cloud Storage (GCS) bucket. Pick a source folder, enter your bucket path, choose where to save a log, and click Start.
+
+<a href="./jetstream.py"><img src="./toolbox/cloud/jetstream/_icons/screenshot.png" alt="NODD Upload Tool" ></a>
+
+
+
 ### NOAA Open Data Dissemination (NODD) Workflow
 ![](./_docs/icons/nodd_workflow.png "")
 

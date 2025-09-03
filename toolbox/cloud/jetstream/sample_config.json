@@ -1,0 +1,37 @@
+{
+  "include_patterns": [
+    "^.*\\.(jpg|jpeg|png|tiff|tif|raw|cr2|nef|arw|dng)$",
+    "^.*\\.(mp4|mov|avi|mkv)$",
+    "^.*\\.(txt|csv|json|xml|log|md)$",
+    "^.*\\.(pdf|doc|docx)$"
+  ],
+  "exclude_folders": [
+    "_archive",
+    "_YEAR", 
+    "ISLAND",
+    "SITE-ID",
+    "SITE_PHOTOS",
+    "Corrected",
+    "corrected",
+    "uncorrected",
+    "MISC",
+    "DARK",
+    "Products",
+    "Thumbs.db",
+    ".DS_Store",
+    "__pycache__",
+    "node_modules",
+    ".git",
+    "temp",
+    "backup"
+  ],
+  "exclude_patterns": [
+    ".*\\.tmp$",
+    ".*\\.bak$",
+    ".*~$",
+    ".*\\.pyc$",
+    ".*\\.swp$",
+    ".*\\.lock$",
+    ".*\\.cache$"
+  ]
+}
