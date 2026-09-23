@@ -22,7 +22,7 @@ File copy tool will copy files and directories from one place to another.
 * https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy
 
 ## Install
-*  Download filecopy_tool.exe
+*  Download [filecopy_tool.exe](https://github.com/MichaelAkridge-NOAA/archive-toolbox/blob/c685d677417bf4b96e2803becb6b0644fab647aa/toolbox/desktop/file-copy-tool/filecopy_tool.exe)
 *  <b>Note:</b> First time Start, before running the app, right click the exe file > then select Properties 
 *  Click unblock & apply (only need to do so once)
 *  Then just double click to run. 
