@@ -23,9 +23,12 @@ File copy tool will copy files and directories from one place to another.
 
 ## Install
 *  Download filecopy_tool.exe
-*  Note: Before running the app, right click the exe file > then select Properties 
-*  Click unblock (only need to do so once)
+*  <b>Note:</b> First time Start, before running the app, right click the exe file > then select Properties 
+*  Click unblock & apply (only need to do so once)
 *  Then just double click to run. 
+
+![](https://github.com/MichaelAkridge-NOAA/archive-toolbox/blob/56b833946c3b9e8bb208ecb7f0f9364b51eb4eab/toolbox/desktop/garmin-gps-file-converter/_docs/s7.png)
+
 
 ![](Python/python_gui_examples/file-copy-tool/_docs/s5.png "")
 
